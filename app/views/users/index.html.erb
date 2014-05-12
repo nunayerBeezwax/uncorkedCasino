@@ -1,4 +1,12 @@
 <h1> Gaming API </h1>
 
 <%= link_to "Sign up", new_user_registration_path %>
+</br>
 <%= link_to "Sign in", new_user_session_path %>
+</br>
+
+<% if current_user %>
+	Current user : <%= current_user.email %>
+	</br>
+	<%= link_to "Request API key", new_api_key_path,  remote: true %>
+<% end %>

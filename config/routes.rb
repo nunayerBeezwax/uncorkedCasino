@@ -5,5 +5,5 @@ Rails.application.routes.draw do
     resources :games
   end
 
-  resources :api_key
+  resources :api_keys
 end
