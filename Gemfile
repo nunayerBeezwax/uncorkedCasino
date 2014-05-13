@@ -8,6 +8,7 @@ gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'devise'
+gem 'rails_12factor'
 
 group :development do
   gem 'better_errors'
@@ -21,4 +22,6 @@ end
 
 group :test do
   gem 'shoulda-matchers'
+  gem 'factory_girl_rails'
+  gem 'faker'
 end
