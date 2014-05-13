@@ -13,3 +13,5 @@ FactoryGirl.define do
     rules "Get 21"
   end
 end
+
+

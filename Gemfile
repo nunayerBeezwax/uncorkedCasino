@@ -13,6 +13,7 @@ gem 'rspec_api_documentation'
 gem 'httparty'
 
 
+
 group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -29,4 +30,6 @@ end
 
 group :test do
   gem 'shoulda-matchers'
+  gem 'factory_girl_rails'
+  gem 'faker'
 end
