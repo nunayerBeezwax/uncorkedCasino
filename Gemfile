@@ -26,6 +26,7 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem 'faker'
   gem 'database_cleaner'
+  gem 'pry'
 end
 
 group :test do
