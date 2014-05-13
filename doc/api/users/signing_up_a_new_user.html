@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Games API</title>
+    <title>Users API</title>
     <meta charset="utf-8">
     <style>
       td.required .name:after {
@@ -29,25 +29,26 @@
   </head>
   <body>
     <div class="container">
-      <h1>Games API</h1>
+      <h1>Users API</h1>
 
       <div class="article">
-        <h2>Listing games</h2>
-        <h3>GET /api/games</h3>
+        <h2>Signing Up a new user</h2>
+        <h3>POST /api/users/</h3>
 
 
           <h3>Request</h3>
 
           <h4>Headers</h4>
           <pre class="request headers">Host: example.org
+Content-Type: application/x-www-form-urlencoded
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/games?api_key=93d12de73c092f39c4b66e1d12fa5396</pre>
+          <pre class="request route highlight">POST /api/users/</pre>
 
-            <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">api_key: 93d12de73c092f39c4b66e1d12fa5396</pre>
 
+            <h4>Body</h4>
+            <pre class="request body">user[email]=gillian%40lowejacobson.org&user[password]=123455678&user[username]=Rupert+Simonis&user[password_confirmation]=123455678</pre>
 
 
             <h3>Response</h3>
@@ -56,16 +57,16 @@ Cookie: </pre>
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 Content-Type: application/json; charset=utf-8
-ETag: &quot;4922aef02a1c009f61135e6dcb363bcb&quot;
+ETag: &quot;0e3e71448d8102b6df9ecce3a68cf0a3&quot;
 Cache-Control: max-age=0, private, must-revalidate
-Set-Cookie: request_method=GET; path=/
-X-Request-Id: 7db00a3d-beb1-4108-91a4-b0d2d6a632c1
-X-Runtime: 0.027474
-Content-Length: 126</pre>
+Set-Cookie: request_method=POST; path=/
+X-Request-Id: 9bf759da-acce-426b-abfe-a04ae05970de
+X-Runtime: 0.019229
+Content-Length: 163</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[{"id":1,"name":"blackjack","rules":"Get 21","created_at":"2014-05-13T22:25:58.275Z","updated_at":"2014-05-13T22:25:58.275Z"}]</pre>
+              <pre class="response body">{"id":4,"email":"gillian@lowejacobson.org","created_at":"2014-05-13T22:25:58.393Z","updated_at":"2014-05-13T22:25:58.393Z","chips":500,"username":"Rupert Simonis"}</pre>
       </div>
     </div>
   </body>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Games API</title>
+    <title>Users API</title>
     <meta charset="utf-8">
     <style>
       td.required .name:after {
@@ -29,25 +29,26 @@
   </head>
   <body>
     <div class="container">
-      <h1>Games API</h1>
+      <h1>Users API</h1>
 
       <div class="article">
-        <h2>access denied</h2>
-        <h3>GET /api/games</h3>
+        <h2>Edit a users profile</h2>
+        <h3>PATCH /api/users/:id</h3>
 
 
           <h3>Request</h3>
 
           <h4>Headers</h4>
           <pre class="request headers">Host: example.org
+Content-Type: application/x-www-form-urlencoded
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/games?api_key=non+verified+string</pre>
+          <pre class="request route highlight">PATCH /api/users/3</pre>
 
-            <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">api_key: non verified string</pre>
 
+            <h4>Body</h4>
+            <pre class="request body">user[username]=Dandlezzz</pre>
 
 
             <h3>Response</h3>
@@ -55,18 +56,17 @@ Cookie: </pre>
             <pre class="response headers">X-Frame-Options: SAMEORIGIN
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
-WWW-Authenticate: Token realm=&quot;Application&quot;
-Content-Type: text/html; charset=utf-8
-Cache-Control: no-cache
-Set-Cookie: request_method=GET; path=/
-X-Request-Id: 9c629578-6e7b-46d4-8895-bef9fbf9edc8
-X-Runtime: 0.008898
-Content-Length: 27</pre>
+Content-Type: application/json; charset=utf-8
+ETag: &quot;bca09ca1098b33aa5b77e7162e2747db&quot;
+Cache-Control: max-age=0, private, must-revalidate
+Set-Cookie: request_method=PATCH; path=/
+X-Request-Id: 174ce953-2443-41c7-9fb1-a0970f1104de
+X-Runtime: 0.008931
+Content-Length: 162</pre>
             <h4>Status</h4>
-            <pre class="response status">401 Unauthorized</pre>
+            <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">HTTP Token: Access denied.
-</pre>
+              <pre class="response body">{"id":3,"email":"teresa_predovic@mcclure.name","created_at":"2014-05-13T22:25:58.360Z","updated_at":"2014-05-13T22:25:58.369Z","chips":500,"username":"Dandlezzz"}</pre>
       </div>
     </div>
   </body>
