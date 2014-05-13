@@ -7,13 +7,9 @@ class User < ActiveRecord::Base
   validates :email, presence: true, length: { minimum: 3, maximum: 40 }
   validates :email, uniqueness: true
   validates :username, :uniqueness => { :case_sensitive => false }
-
-
   has_one :api_key
-  belongs_to :house
 
-  before_create :give_chips
-
+  
   def login=(login)
   	@login = login
   end
@@ -31,7 +27,10 @@ class User < ActiveRecord::Base
 	  end
 	end
 
-  def give_chips
-  	self.chips = 500
+  def set_gravatar_url
+    hash = Digest::MD5.hexdigest(self.email.downcase.strip)
+    update_attributes(gravatar_url: "http://gravatar.com/avatar/#{hash}") 
   end
+
+
 end

@@ -4,6 +4,7 @@ module Api
 
 		def create
 			@user = User.create(user_params)
+			@user.set_gravatar_url
 			render json: @user
 		end
 
