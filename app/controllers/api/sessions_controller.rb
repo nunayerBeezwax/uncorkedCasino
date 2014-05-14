@@ -9,6 +9,7 @@ class Api::SessionsController < Devise::RegistrationsController
 
   def create
     build_resource
+    binding.pry
     resource =  User.find_for_database_authentication(
       user: params[:user][:username]
     )
