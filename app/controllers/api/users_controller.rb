@@ -10,7 +10,7 @@ module Api
 		def update
 			@user = User.find(params[:id])
 			@user.update(user_params)
-			@user.set_gravatr_url
+			@user.set_gravatar_url	
 			render json: @user
 		end
 
