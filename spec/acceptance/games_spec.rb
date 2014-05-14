@@ -7,14 +7,18 @@ resource "Games" do
   get "/api/games" do
     example "Listing games" do
 	    user = FactoryGirl.create(:user)
-		  token = FactoryGirl.create(:api_key)
-		  token.update(user_id: user.id)
+		 	user.sign_in
 		  g = FactoryGirl.create(:game)
 	    do_request(api_key: user.api_key.access_token)
 	    response_body.should == [g].to_json
     end
     example "access denied" do
-	    do_request(api_key: "non verified string")
+	    user = FactoryGirl.create(:user)
+		 	user.sign_in
+		 	expired_token = user.api_key.access_token
+		 	user.sign_out
+		 	g = FactoryGirl.create(:game)
+	    do_request(api_key: expired_token)
 	    response_status.should == 401
     end
   end
