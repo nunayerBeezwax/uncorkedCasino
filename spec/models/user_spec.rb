@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe User do
+
 	describe "set_gravatar_url" do
 		it "should set the url of the users gravatar after creation" do
 			user = User.create(email: "danieladammiller@gmail.com", username: "dand")

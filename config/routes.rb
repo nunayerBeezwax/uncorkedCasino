@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
  root to: "users#index"
-# devise_for :users, controllers: { registrations: 'registrations' }
   
   namespace :api do
     resources :games
-    devise_for :users, controllers: { registrations: 'api/registrations' }
+    devise_for :users, controllers: { registrations: 'api/registrations', sessions: 'api/sessions'}
     resources :users, only: [:show, :update, :destroy]
+    resources :api_keys, only: :create
   end
 
   resources :api_keys
