@@ -27,10 +27,27 @@ class User < ActiveRecord::Base
 	#   end
 	# end
 
+
+
   def set_gravatar_url
     hash = Digest::MD5.hexdigest(self.email.downcase.strip)
     update_attributes(gravatar_url: "http://gravatar.com/avatar/#{hash}") 
   end
+
+  #helper methods
+
+  def sign_in
+    ApiKey.create(user_id: self.id)
+  end
+
+  def sign_out
+    ApiKey.find_by(user_id: self.id).destroy
+  end
+
+  def signed_in?
+    return true if ApiKey.find_by(user_id: self.id) else false
+  end
+
 
 
 end
