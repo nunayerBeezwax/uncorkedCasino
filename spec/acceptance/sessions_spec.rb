@@ -5,9 +5,13 @@ resource "Sessions" do
 	post '/api/users/sign_in' do
 		example "Signing in a New User" do
 			user = FactoryGirl.create(:user)
-			do_request({:username => user.username, :password => user.password})
+			do_request(:user => {password: user.password , username: user.username})
 			response_status.should == 200
 			response_body.should include 'access_token'
+		end
+		example "Trying to sign in with bad credentials" do 
+			do_request(user: {username: 'bob', password: 'notarealpassword'})
+			response_status.should == 401
 		end
 	end
 end
