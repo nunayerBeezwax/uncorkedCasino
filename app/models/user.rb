@@ -8,25 +8,11 @@ class User < ActiveRecord::Base
   validates :email, uniqueness: true
   validates :username, :uniqueness => { :case_sensitive => false }
   has_one :api_key
+  has_one :seat
 
-  
- #  def login=(login)
- #  	@login = login
- #  end
-
- #  def login
- #  	@login || self.username || self.email
- #  end
-
- #  def self.find_first_by_auth_conditions(warden_conditions)
-	#   conditions = warden_conditions.dup
-	#   if login = conditions.delete(:login)
-	#     where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
-	#   else
-	#     where(conditions).first
-	#   end
-	# end
-
+  def sit(table)
+    table.seats.first.update(user_id: self.id)
+  end
 
 
   def set_gravatar_url
@@ -49,5 +35,21 @@ class User < ActiveRecord::Base
   end
 
 
+ 
+ #  def login=(login)
+ #    @login = login
+ #  end
 
+ #  def login
+ #    @login || self.username || self.email
+ #  end
+
+ #  def self.find_first_by_auth_conditions(warden_conditions)
+  #   conditions = warden_conditions.dup
+  #   if login = conditions.delete(:login)
+  #     where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+  #   else
+  #     where(conditions).first
+  #   end
+  # end
 end

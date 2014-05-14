@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe User do
 
+it { should have_one :seat }
+
 	describe "set_gravatar_url" do
 		it "should set the url of the users gravatar after creation" do
 			user = User.create(email: "danieladammiller@gmail.com", username: "dand")
@@ -24,6 +26,19 @@ describe User do
 			user.signed_in?.should == true
 			user.sign_out
 			user.signed_in?.should == false
+		end
+	end
+
+	describe "sit" do
+		it "should allow a user to sit a table" do
+			house = House.create
+			game = FactoryGirl.create(:game)
+			table = FactoryGirl.create(:table)
+			table.update(game_id: game.id)
+			table.seat_qty.times { table.seats << Seat.create }
+			user = FactoryGirl.create(:user)
+			user.sit(table)
+			user.seat.table.game.name.should == "blackjack"
 		end
 	end
 end
