@@ -9,9 +9,10 @@ resource "Sessions" do
 			response_status.should == 200
 			response_body.should include 'access_token'
 		end
-		example "Trying to sign in with bad credentials" do 
+		example "Refuses sign in on bad credentials" do 
 			do_request(user: {username: 'bob', password: 'notarealpassword'})
 			response_status.should == 401
 		end
 	end
+
 end
