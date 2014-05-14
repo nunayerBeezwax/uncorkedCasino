@@ -3,8 +3,16 @@ class ApiKey < ActiveRecord::Base
 	before_create :generate_access_token
 
 	def self.sweep
-    self.destroy_all(:conditions => ["updated_at < ?", 30.minutes.ago]
+    self.all.each do |token|
+    	if token.expired?
+    		token.destroy
+    	end
+    end
 	end
+
+	def expired?
+		return true if self.created_at < 1.day.ago else false
+	end	
 
 	private
 	
