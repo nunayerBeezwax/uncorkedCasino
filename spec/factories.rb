@@ -11,7 +11,6 @@ FactoryGirl.define do
   end
    factory :game do
     name "blackjack"
-    rules "Get 21"
   end
 end
 

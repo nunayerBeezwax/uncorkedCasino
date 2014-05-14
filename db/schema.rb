@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140513233011) do
+ActiveRecord::Schema.define(version: 20140514221939) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,9 +23,42 @@ ActiveRecord::Schema.define(version: 20140513233011) do
     t.integer  "user_id"
   end
 
+  create_table "cards", force: true do |t|
+    t.integer  "deck_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "seat_id"
+  end
+
+  create_table "decks", force: true do |t|
+    t.integer  "table_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "games", force: true do |t|
     t.string   "name"
-    t.text     "rules"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "house_id"
+  end
+
+  create_table "houses", force: true do |t|
+    t.integer  "bank",       default: 1000000
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "seats", force: true do |t|
+    t.integer  "table_id"
+    t.integer  "user_id"
+    t.integer  "number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tables", force: true do |t|
+    t.integer  "game_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
