@@ -8,6 +8,7 @@ class ApiKey < ActiveRecord::Base
     		token.destroy
     	end
     end
+    puts "Sweep happened"
 	end
 
 	def expired?

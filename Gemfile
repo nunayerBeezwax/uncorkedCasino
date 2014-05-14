@@ -11,6 +11,7 @@ gem 'devise'
 gem 'rails_12factor'
 gem 'rspec_api_documentation'
 gem 'httparty'
+gem 'whenever'
 
 
 
