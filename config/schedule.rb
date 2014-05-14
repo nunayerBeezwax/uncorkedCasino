@@ -7,7 +7,7 @@
 #
 # set :output, "/path/to/my/cron_log.log"
 #
-every 1.minute do
+every 1.minutes do
   # command "/app/models/api_key.sweep"
   runner "ApiKey.sweep", :environment => "development"
 # rake "some:great:rake:task"
