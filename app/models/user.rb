@@ -10,22 +10,22 @@ class User < ActiveRecord::Base
   has_one :api_key
 
   
-  def login=(login)
-  	@login = login
-  end
+ #  def login=(login)
+ #  	@login = login
+ #  end
 
-  def login
-  	@login || self.username || self.email
-  end
+ #  def login
+ #  	@login || self.username || self.email
+ #  end
 
-  def self.find_first_by_auth_conditions(warden_conditions)
-	  conditions = warden_conditions.dup
-	  if login = conditions.delete(:login)
-	    where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
-	  else
-	    where(conditions).first
-	  end
-	end
+ #  def self.find_first_by_auth_conditions(warden_conditions)
+	#   conditions = warden_conditions.dup
+	#   if login = conditions.delete(:login)
+	#     where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
+	#   else
+	#     where(conditions).first
+	#   end
+	# end
 
   def set_gravatar_url
     hash = Digest::MD5.hexdigest(self.email.downcase.strip)

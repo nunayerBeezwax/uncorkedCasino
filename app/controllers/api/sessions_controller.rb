@@ -1,17 +1,14 @@
 class Api::SessionsController < Devise::RegistrationsController
   prepend_before_filter :require_no_authentication, :only => [:create ]
-
   before_filter :ensure_params_exist
-
   respond_to :json
-
   skip_before_filter :verify_authenticity_token
 
   def create
     build_resource
-    binding.pry
+   
     resource =  User.find_for_database_authentication(
-      user: params[:user][:username]
+      username: params[:user][:username]
     )
     return invalid_login_attempt unless resource
 
@@ -19,8 +16,9 @@ class Api::SessionsController < Devise::RegistrationsController
       sign_in("user", resource)
       render json: {
         success: true,
-        auth_token: resource.api_key[:access_token],
+        auth_token: ApiKey.create(user_id: resource.id),
         email: resource.email
+        # username too?
       }
       return
     end
