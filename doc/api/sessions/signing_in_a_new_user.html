@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Users API</title>
+    <title>Sessions API</title>
     <meta charset="utf-8">
     <style>
       td.required .name:after {
@@ -29,11 +29,11 @@
   </head>
   <body>
     <div class="container">
-      <h1>Users API</h1>
+      <h1>Sessions API</h1>
 
       <div class="article">
-        <h2>Edit a users profile</h2>
-        <h3>PATCH /api/users/:id</h3>
+        <h2>Signing in a New User</h2>
+        <h3>POST /api/users/sign_in</h3>
 
 
           <h3>Request</h3>
@@ -44,11 +44,11 @@ Content-Type: application/x-www-form-urlencoded
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">PATCH /api/users/3</pre>
+          <pre class="request route highlight">POST /api/users/sign_in</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">user[username]=Dandlezzz</pre>
+            <pre class="request body">user[password]=123455678&user[username]=Lenore+Hickle</pre>
 
 
             <h3>Response</h3>
@@ -57,16 +57,17 @@ Cookie: </pre>
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 Content-Type: application/json; charset=utf-8
-ETag: &quot;26450ff9bc72384515b3a1d125c93573&quot;
+ETag: &quot;9c143693a2f6cb8aca65230e7053603b&quot;
 Cache-Control: max-age=0, private, must-revalidate
-Set-Cookie: request_method=PATCH; path=/
-X-Request-Id: 017a355e-d246-429f-ba28-1fe185e1f3d6
-X-Runtime: 0.011691
-Content-Length: 256</pre>
+Set-Cookie: request_method=POST; path=/
+_gaming_api_session=NlJQL285TWxYa2J0bW10cnhHdSt6VmVSUmdpR09qaDZhSE1LbWEvMHBwaFhGWGVtMy8wTlJpOTdYM01tSEJWZFJpVUZBdEs3Y2MxdDlwZDFzRVMveExXUU9PaGpUSjg4UnRuUU9ZdXp2R3kxMTNySEFYMVFkODFqQjJwZkY3dG5WT0FCNEdzSVpmT0ZMQ2VvV3RJOFB3PT0tLUI4eUM1VnRrUnB6UVV1TStMVHBLVFE9PQ%3D%3D--2681c9c5aa562755d5e6fce3694cd89d0e185070; path=/; HttpOnly
+X-Request-Id: 4a95a3b7-3296-4c0d-abdc-71b332d64cd6
+X-Runtime: 0.016169
+Content-Length: 214</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{"id":3,"email":"lucinda@mertz.biz","created_at":"2014-05-15T06:09:33.633Z","updated_at":"2014-05-15T06:09:33.645Z","chips":500,"username":"Dandlezzz","gravatar_url":"http://gravatar.com/avatar/68f4b0ad5a512a15078fd4edd518e49b","authentication_token":null}</pre>
+              <pre class="response body">{"success":true,"auth_token":{"id":5,"access_token":"5bd9ea3151091558ac4206949ae39a4d","created_at":"2014-05-15T06:09:33.776Z","updated_at":"2014-05-15T06:09:33.776Z","user_id":8},"email":"pamela.bruen@maggio.com"}</pre>
       </div>
     </div>
   </body>

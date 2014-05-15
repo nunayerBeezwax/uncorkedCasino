@@ -8,11 +8,11 @@ gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'devise'
-gem 'rails_12factor'
 gem 'rspec_api_documentation'
 gem 'httparty'
 gem 'whenever'
 
+gem 'rails_12factor', group: :production
 
 
 group :development do
