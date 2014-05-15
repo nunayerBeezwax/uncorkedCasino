@@ -10,8 +10,14 @@ class User < ActiveRecord::Base
   has_one :api_key
   has_one :seat
 
-  def sit(table)
-    table.seats.first.update(user_id: self.id)
+  def sit(table, seatnumber=nil)
+    if seatnumber == nil
+      table.first_vacant.update(user_id: self.id)
+    elsif table.seats[seatnumber].occupied?
+      false
+    else
+      table.seats[seatnumber].update(user_id: self.id)
+    end
   end
 
 

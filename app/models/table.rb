@@ -9,10 +9,25 @@ class Table < ActiveRecord::Base
 	end
 
 	def populate_seats
-		seat_qty.times { self.seats << Seat.create }
+		seat_qty.times { |n| self.seats << Seat.create(number: n+1 ) }
 	end
 
 	def player_count
 		self.users.length
 	end
+
+	def vacancies
+		vacants = []
+		self.seats.each do |seat| 
+			if !seat.occupied? 
+				vacants << seat
+			end
+		end
+		vacants
+	end
+
+	def first_vacant
+		self.vacancies.sort.first
+	end
+
 end
