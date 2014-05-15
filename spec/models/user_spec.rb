@@ -35,7 +35,7 @@ it { should have_one :seat }
 			game = FactoryGirl.create(:game)
 			table = FactoryGirl.create(:table)
 			table.update(game_id: game.id)
-			table.seat_qty.times { table.seats << Seat.create }
+			table.populate_seats
 			user = FactoryGirl.create(:user)
 			user.sit(table)
 			user.seat.table.game.name.should == "blackjack"

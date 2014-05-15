@@ -31,6 +31,6 @@ class User < ActiveRecord::Base
   end
 
   def signed_in?
-    return true if ApiKey.find_by(user_id: self.id) else false
+   !ApiKey.find_by(user_id: self.id).nil? 
   end
 end

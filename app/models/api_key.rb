@@ -10,11 +10,10 @@ class ApiKey < ActiveRecord::Base
     		token.destroy
     	end
     end
-    puts "Sweep happened"
 	end
 
 	def expired?
-		return true if self.created_at < 1.day.ago else false
+		self.created_at < 1.day.ago 
 	end	
 
 	private

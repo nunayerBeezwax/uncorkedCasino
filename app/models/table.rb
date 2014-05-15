@@ -8,6 +8,10 @@ class Table < ActiveRecord::Base
 		return 5 if self.game.name == "blackjack" 		
 	end
 
+	def populate_seats
+		seat_qty.times { self.seats << Seat.create }
+	end
+
 	def player_count
 		self.users.length
 	end
