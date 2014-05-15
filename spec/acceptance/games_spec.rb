@@ -12,15 +12,7 @@ before(:each) do
   ApplicationController.any_instance.stub(:restrict_access => true)
 end
 
-  get "/api/games" do
-    example "Listing games" do
-	    user = FactoryGirl.create(:user)
-		 	user.sign_in
-		  g = FactoryGirl.create(:game)
-	    do_request
-	    response_body.should == [g].to_json
-    end
-  end
+
 end
 
 
