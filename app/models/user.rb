@@ -13,10 +13,10 @@ class User < ActiveRecord::Base
   def sit(table, seatnumber=nil)
     if seatnumber == nil
       table.first_vacant.update(user_id: self.id)
-    elsif table.seats[seatnumber].occupied?
+    elsif table.seats[seatnumber-1].occupied?
       false
     else
-      table.seats[seatnumber].update(user_id: self.id)
+      table.vacancies[seatnumber].update(user_id: self.id)
     end
   end
 
