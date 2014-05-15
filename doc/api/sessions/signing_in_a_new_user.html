@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Users API</title>
+    <title>Sessions API</title>
     <meta charset="utf-8">
     <style>
       td.required .name:after {
@@ -29,11 +29,11 @@
   </head>
   <body>
     <div class="container">
-      <h1>Users API</h1>
+      <h1>Sessions API</h1>
 
       <div class="article">
-        <h2>Signing Up a new user</h2>
-        <h3>POST /api/users/</h3>
+        <h2>Signing in a New User</h2>
+        <h3>POST /api/users/sign_in</h3>
 
 
           <h3>Request</h3>
@@ -44,11 +44,11 @@ Content-Type: application/x-www-form-urlencoded
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/users/</pre>
+          <pre class="request route highlight">POST /api/users/sign_in</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">user[email]=noemie%40watershudson.net&user[password]=123455678&user[username]=Keeley+Schoen&user[password_confirmation]=123455678</pre>
+            <pre class="request body">user[password]=123455678&user[username]=Dejuan+Schultz</pre>
 
 
             <h3>Response</h3>
@@ -57,16 +57,17 @@ Cookie: </pre>
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 Content-Type: application/json; charset=utf-8
-ETag: &quot;6233173287b8a72a4aa1a40ee604d19d&quot;
+ETag: &quot;4841147601cda152fc4a29aae8a34d2c&quot;
 Cache-Control: max-age=0, private, must-revalidate
 Set-Cookie: request_method=POST; path=/
-X-Request-Id: fb6399f8-65e4-44c4-9de1-15c8a662282d
-X-Runtime: 0.014969
-Content-Length: 266</pre>
+_gaming_api_session=RTBKUk85RmR1VWQ2dUhZOXNyd0Ntd0t0RUx5MG1rTWM5dmRiellwWEZ6Z3FTZkZ2WHNSUytpY1VBWThtU2wzOG9YWFAxKzVESWZHMFVJRjh4d29tT2tpSUg4RklIMFdvUytaVzBNQzJQWlQ3dkNTNFJzOXAxSi85TGl5dEVzc1k5YlFlK3czMVVIaWpka21RQWp5NUd3PT0tLXRHa1lPZWhCdjRZTnJ5Q0JjQkVjYWc9PQ%3D%3D--496230f5d441e26eea1a078fcbeddb42772e213f; path=/; HttpOnly
+X-Request-Id: b919af3f-f34d-46ab-8c2e-b45894cf68a8
+X-Runtime: 0.037633
+Content-Length: 217</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{"id":2,"email":"noemie@watershudson.net","created_at":"2014-05-15T22:22:31.835Z","updated_at":"2014-05-15T22:22:31.838Z","chips":500,"username":"Keeley Schoen","gravatar_url":"http://gravatar.com/avatar/d4e616a04b793049ff7c4f0f3907a507","authentication_token":null}</pre>
+              <pre class="response body">{"success":true,"auth_token":{"id":2,"access_token":"b224ef4b1d1f6f84c842702286f30971","created_at":"2014-05-15T22:22:31.812Z","updated_at":"2014-05-15T22:22:31.812Z","user_id":1},"email":"carey.considine@white.name"}</pre>
       </div>
     </div>
   </body>

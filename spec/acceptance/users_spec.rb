@@ -2,6 +2,12 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource "Users" do
+
+before(:each) do
+  ApplicationController.any_instance.stub(:restrict_access => true)
+end
+
+# auth not required for signup obviously
 	post '/api/users/' do
 		example "Signing Up a new user" do
 			user = FactoryGirl.build(:user)
@@ -20,8 +26,8 @@ resource "Users" do
 	patch '/api/users/:id' do
 		example "Edit a users profile" do
 			user = FactoryGirl.create(:user)
-			do_request({:id => user.id, user: {username: "Dandlezzz"}})
-			response_body.should include "Dandlezzz"
+			do_request({:id => user.id, user: {username: "jenny"}})
+			response_body.should include "jenny"
 		end
 	end
 	delete '/api/users/:id' do

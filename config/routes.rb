@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :games
     devise_for :users, controllers: { registrations: 'api/registrations', sessions: 'api/sessions'}
     resources :users, only: [:show, :update, :destroy]
+    resources :houses
     resources :api_keys, only: :create
   end
 

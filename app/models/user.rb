@@ -10,8 +10,14 @@ class User < ActiveRecord::Base
   has_one :api_key
   has_one :seat
 
-  def sit(table)
-    table.seats.first.update(user_id: self.id)
+  def sit(table, seatnumber=nil)
+    if seatnumber == nil
+      table.first_vacant.update(user_id: self.id)
+    elsif table.seats[seatnumber-1].occupied?
+      false
+    else
+      table.vacancies[seatnumber].update(user_id: self.id)
+    end
   end
 
 
@@ -31,25 +37,6 @@ class User < ActiveRecord::Base
   end
 
   def signed_in?
-    return true if ApiKey.find_by(user_id: self.id) else false
+   !ApiKey.find_by(user_id: self.id).nil? 
   end
-
-
- 
- #  def login=(login)
- #    @login = login
- #  end
-
- #  def login
- #    @login || self.username || self.email
- #  end
-
- #  def self.find_first_by_auth_conditions(warden_conditions)
-  #   conditions = warden_conditions.dup
-  #   if login = conditions.delete(:login)
-  #     where(conditions).where(["lower(username) = :value OR lower(email) = :value", { :value => login.downcase }]).first
-  #   else
-  #     where(conditions).first
-  #   end
-  # end
 end

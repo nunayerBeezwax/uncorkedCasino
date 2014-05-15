@@ -1,6 +1,8 @@
 module Api
 	class RegistrationsController < Devise::RegistrationsController
 	respond_to :json
+	skip_before_filter :restrict_access
+
 
 		def create
 			@user = User.create(user_params)

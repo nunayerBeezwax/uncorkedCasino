@@ -14,5 +14,4 @@ resource "Sessions" do
 			response_status.should == 401
 		end
 	end
-
 end

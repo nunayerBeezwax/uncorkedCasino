@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Games API</title>
+    <title>houses API</title>
     <meta charset="utf-8">
     <style>
       td.required .name:after {
@@ -29,11 +29,11 @@
   </head>
   <body>
     <div class="container">
-      <h1>Games API</h1>
+      <h1>houses API</h1>
 
       <div class="article">
-        <h2>Listing games</h2>
-        <h3>GET /api/games</h3>
+        <h2>Get a list of all the games being played</h2>
+        <h3>GET /api/houses</h3>
 
 
           <h3>Request</h3>
@@ -43,10 +43,10 @@
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/games?api_key=93d12de73c092f39c4b66e1d12fa5396</pre>
+          <pre class="request route highlight">GET /api/houses?games=all</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">api_key: 93d12de73c092f39c4b66e1d12fa5396</pre>
+            <pre class="request query_parameters highlight">games: all</pre>
 
 
 
@@ -56,16 +56,16 @@ Cookie: </pre>
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 Content-Type: application/json; charset=utf-8
-ETag: &quot;4922aef02a1c009f61135e6dcb363bcb&quot;
+ETag: &quot;cf928899172c5121c78e820b6e92401a&quot;
 Cache-Control: max-age=0, private, must-revalidate
 Set-Cookie: request_method=GET; path=/
-X-Request-Id: 7db00a3d-beb1-4108-91a4-b0d2d6a632c1
-X-Runtime: 0.027474
-Content-Length: 126</pre>
+X-Request-Id: a9106f5b-3e1e-4636-84df-3eedf98b4b6b
+X-Runtime: 0.003982
+Content-Length: 122</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[{"id":1,"name":"blackjack","rules":"Get 21","created_at":"2014-05-13T22:25:58.275Z","updated_at":"2014-05-13T22:25:58.275Z"}]</pre>
+              <pre class="response body">[{"id":2,"name":"blackjack","created_at":"2014-05-15T22:22:31.757Z","updated_at":"2014-05-15T22:22:31.758Z","house_id":2}]</pre>
       </div>
     </div>
   </body>
