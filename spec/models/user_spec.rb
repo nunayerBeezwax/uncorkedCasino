@@ -9,11 +9,32 @@ before(:each) do
 	@game = FactoryGirl.create(:game)
 	@table = FactoryGirl.create(:table)
 	@table.update(game_id: @game.id)
-	@table.populate_seats
 	@user1 = FactoryGirl.create(:user)
 	@user2 = FactoryGirl.create(:user)
 	@user3 = FactoryGirl.create(:user)
 end
+
+	describe "bet" do 
+		it "allows a player to place a bet, removes their chips, qualifies them to be in hand" do
+			@user1.sit(@table)
+			@user2.sit(@table)
+			@user3.sit(@table)
+			@user1.bet(5)
+			@user1.chips.should == 495
+			@user1.seat.bet_placed.should eq true
+		end
+	end
+
+	describe "hit" do
+		it "deals player another card" do
+			@table.setup
+			@user1.sit(@table)
+			@user1.bet(5)
+			@table.deal
+			@user1.hit
+			@user1.seat.cards.count.should eq 3
+		end
+	end
 
 
 	describe "set_gravatar_url" do

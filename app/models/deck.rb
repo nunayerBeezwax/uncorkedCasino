@@ -4,7 +4,7 @@ class Deck < ActiveRecord::Base
 	after_create :make_cards
 
 	def make_cards
-		rank = %w{ 2 3 4 5 6 7 8 9 10 11 12 13 14 }
+		rank = %w{ 1 2 3 4 5 6 7 8 9 10 11 12 13 }
 		suit = %w{ C S H D }
 		suit.each do |suit| 
 			rank.each do |rank| 

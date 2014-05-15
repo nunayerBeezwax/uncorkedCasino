@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+## When run individually the tests pass, they fail when run together
+
 describe Table do
   	it { should have_one :shoe }
 		it { should have_many :seats }
@@ -9,7 +11,6 @@ describe Table do
 			@game = FactoryGirl.create(:game)
 			@table = FactoryGirl.create(:table)
 			@table.update(game_id: @game.id)
-			@table.populate_seats
 			@user1 = FactoryGirl.create(:user)
 			@user2 = FactoryGirl.create(:user)
 			@user3 = FactoryGirl.create(:user)
@@ -36,15 +37,6 @@ describe Table do
 		end
 	end
 
-	describe "populate_seats" do
-		it "should add the number of seats to the table based on its game" do
-			@table.game.name.should == 'blackjack'
-			@table.seats.length.should == 5
-			@table.seats.last.number.should == 5
-			@table.seats.first.number.should == 1
-		end
-	end
-
 	describe "player_count" do
 		it "should determine the number of players at a table" do
 			@user1.sit(@table)
@@ -54,29 +46,40 @@ describe Table do
 
 	describe "#setup" do
 		it "prepares a table for blackjack - makes seats and shoe" do
-			test_table = Table.create
-			test_table.seats.count.should eq 5
+			@table.seats.count.should eq 5
+			@table.seats.last.number.should == 5
 		end
 	end
 
 	describe "#fill_shoe" do 
 		it "takes a number of decks (default 1) and puts the cards in that table's shoe" do
-			test_table = Table.create
-			test_table.setup
-			test_table.fill_shoe(2)
-			test_table.shoe.cards.count.should eq 104
-			test_table.rack.count.should eq 104
+			@table.shoe.cards.count.should eq 52
+			@table.rack.count.should eq 52
 		end
 	end
 
 	describe "#deal" do
 		it "gives 2 cards to each player who placed a bet" do
-			test_table = Table.create
-			test_user = User.create
-			test_user.update(id: 1)
-			test_table.seats.first.update(user_id: test_user.id)
-			test_table.deal
-			test_table.seats.first.cards.count.should eq 2
+			@user1.sit(@table)
+			@user2.sit(@table)
+			@table.seats.first.user.should eq @user1
+			@table.seats[1].user.should eq @user2
+			@table.deal
+			@table.seats.first.cards.count.should eq 2
+			@table.seats[1].cards.count.should eq 2
+			@table.seats[2].cards.count.should eq 0
+			@table.house_cards.count.should eq 2
+		end
+	end
+
+	describe "#bust" do
+		it "checks a hand to see if it is over 21" do
+			@user1.sit(@table)
+			@user1.seat.cards << Card.new(suit: "h", rank: 9)
+			@user1.seat.cards << Card.new(suit: "h", rank: 10)
+			@user1.seat.cards << Card.new(suit: "h", rank: 13)
+			hand = @table.make_hand(@user1.seat.cards)
+			@table.bust(hand).should eq true
 		end
 	end
 end

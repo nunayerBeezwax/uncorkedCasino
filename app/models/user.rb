@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   validates :username, :uniqueness => { :case_sensitive => false }
   has_one :api_key
   has_one :seat
+  has_one :table, through: :seat
 
   def sit(table, seatnumber=nil)
     if seatnumber == nil
@@ -20,13 +21,28 @@ class User < ActiveRecord::Base
     end
   end
 
+  def bet(amount)
+    ##strange thing where @table has limit but @user.table doesn't...
+    # if amount.between?(self.table.limit[0], self.table.limit[1])
+      self.chips -= amount
+      self.seat.place_bet(amount)
+    # end
+  end
+
+  def hit
+    self.table.deal_card(self)
+  end
+
+  def stand
+    self.table.action += 1
+  end
+
+  #helper methods
 
   def set_gravatar_url
     hash = Digest::MD5.hexdigest(self.email.downcase.strip)
     update_attributes(gravatar_url: "http://gravatar.com/avatar/#{hash}") 
   end
-
-  #helper methods
 
   def sign_in
     ApiKey.create(user_id: self.id)
