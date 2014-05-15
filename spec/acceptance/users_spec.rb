@@ -26,8 +26,8 @@ end
 	patch '/api/users/:id' do
 		example "Edit a users profile" do
 			user = FactoryGirl.create(:user)
-			do_request({:id => user.id, user: {username: "Dandlezzz"}})
-			response_body.should include "Dandlezzz"
+			do_request({:id => user.id, user: {username: "jenny"}})
+			response_body.should include "jenny"
 		end
 	end
 	delete '/api/users/:id' do

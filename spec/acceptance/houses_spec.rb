@@ -25,10 +25,11 @@ end
 		end
 	end
 
-	# get '/api/houses' do
-	# 	example "Get a list of all the tables with vacancies and the games they are playing" do
-	# 		do_request({:open_seats => 'all'})
-			
-	# 	end
-	# end
+	get '/api/houses' do
+		example "Get a list of open tables for a specific game" do
+			do_request({:games => 'blackjack'})
+			response_status.should == 200
+			response_body.should include "blackjack"
+		end
+	end
 end
