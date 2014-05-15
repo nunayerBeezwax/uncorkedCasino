@@ -7,7 +7,7 @@ before(:each) do
   ApplicationController.any_instance.stub(:restrict_access => true)
 end
 
-
+# auth not required for signup obviously
 	post '/api/users/' do
 		example "Signing Up a new user" do
 			user = FactoryGirl.build(:user)

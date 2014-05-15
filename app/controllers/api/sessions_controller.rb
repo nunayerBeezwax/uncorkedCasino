@@ -1,8 +1,8 @@
 class Api::SessionsController < Devise::RegistrationsController
-  prepend_before_filter :require_no_authentication, :only => [:create ]
+
   before_filter :ensure_params_exist
   respond_to :json
-  skip_before_filter :verify_authenticity_token
+  skip_before_filter :restrict_access
 
   def create
     build_resource
