@@ -11,7 +11,11 @@ FactoryGirl.define do
   end
    factory :game do
     name "blackjack"
+    house_id 1
   end
+
+
+ 
 end
 
 
