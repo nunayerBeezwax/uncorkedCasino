@@ -2,6 +2,12 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource "Users" do
+
+before(:each) do
+  ApplicationController.any_instance.stub(:restrict_access => true)
+end
+
+
 	post '/api/users/' do
 		example "Signing Up a new user" do
 			user = FactoryGirl.build(:user)

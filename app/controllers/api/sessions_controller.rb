@@ -6,7 +6,6 @@ class Api::SessionsController < Devise::RegistrationsController
 
   def create
     build_resource
-    
     resource =  User.find_for_database_authentication(
       :username => params[:user][:username]
       )
@@ -16,9 +15,7 @@ class Api::SessionsController < Devise::RegistrationsController
       sign_in("user", resource)
       render json: {
         success: true,
-
         auth_token: ApiKey.create(:user_id =>resource.id),
-
         auth_token: ApiKey.create(user_id: resource.id),
         email: resource.email
         # username too?

@@ -2,6 +2,11 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource "Sessions" do
+
+before(:each) do
+  ApplicationController.any_instance.stub(:restrict_access => true)
+end
+
 	post '/api/users/sign_in' do
 		example "Signing in a New User" do
 			user = FactoryGirl.create(:user)
@@ -14,5 +19,4 @@ resource "Sessions" do
 			response_status.should == 401
 		end
 	end
-
 end
