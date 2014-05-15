@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Users API</title>
+    <title>Games API</title>
     <meta charset="utf-8">
     <style>
       td.required .name:after {
@@ -29,23 +29,24 @@
   </head>
   <body>
     <div class="container">
-      <h1>Users API</h1>
+      <h1>Games API</h1>
 
       <div class="article">
-        <h2>destroy a user</h2>
-        <h3>DELETE /api/users/:id</h3>
+        <h2>Access denied - timeout</h2>
+        <h3>GET /api/games</h3>
 
 
           <h3>Request</h3>
 
           <h4>Headers</h4>
           <pre class="request headers">Host: example.org
-Content-Type: application/x-www-form-urlencoded
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/users/1</pre>
+          <pre class="request route highlight">GET /api/games?api_key=e8d381961b491ec6e726a732bb33571a</pre>
 
+            <h4>Query Parameters</h4>
+            <pre class="request query_parameters highlight">api_key: e8d381961b491ec6e726a732bb33571a</pre>
 
 
 
@@ -54,12 +55,18 @@ Cookie: </pre>
             <pre class="response headers">X-Frame-Options: SAMEORIGIN
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
+WWW-Authenticate: Token realm=&quot;Application&quot;
+Content-Type: text/html; charset=utf-8
 Cache-Control: no-cache
-Set-Cookie: request_method=DELETE; path=/
-X-Request-Id: c035942f-3eda-4a7d-9566-0d4d29966ec4
-X-Runtime: 0.032573</pre>
+Set-Cookie: request_method=GET; path=/
+X-Request-Id: 59e4c343-451c-442c-9aac-d523ba6ca26f
+X-Runtime: 0.008269
+Content-Length: 27</pre>
             <h4>Status</h4>
-            <pre class="response status">204 No Content</pre>
+            <pre class="response status">401 Unauthorized</pre>
+              <h4>Body</h4>
+              <pre class="response body">HTTP Token: Access denied.
+</pre>
       </div>
     </div>
   </body>
