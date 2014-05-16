@@ -4,11 +4,12 @@ class User < ActiveRecord::Base
   attr_accessor :login
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  validates :email, presence: true, length: { minimum: 3, maximum: 40 }
+  validates :email, presence: true, length: { minimum: 3, maximum: 50 }
   validates :email, uniqueness: true
   validates :username, :uniqueness => { :case_sensitive => false }
   has_one :api_key
   has_one :seat
+  has_one :table, through: :seat
 
   def sit(table, seatnumber=nil)
     if seatnumber == nil
@@ -20,13 +21,12 @@ class User < ActiveRecord::Base
     end
   end
 
+  #helper methods
 
   def set_gravatar_url
     hash = Digest::MD5.hexdigest(self.email.downcase.strip)
     update_attributes(gravatar_url: "http://gravatar.com/avatar/#{hash}") 
   end
-
-  #helper methods
 
   def sign_in
     ApiKey.create(user_id: self.id)
