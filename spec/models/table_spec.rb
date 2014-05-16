@@ -13,6 +13,8 @@ describe Table do
 			@user1 = FactoryGirl.create(:user)
 			@user2 = FactoryGirl.create(:user)
 			@user3 = FactoryGirl.create(:user)
+			@user4 = FactoryGirl.create(:user)
+			@user5 = FactoryGirl.create(:user)
 		end
 
 	describe "seat_qty" do
@@ -37,6 +39,17 @@ describe Table do
 		end
 	end
 
+	describe "full_table?" do
+		it "is true if a table is full" do
+			@user1.sit(@table)
+			@user2.sit(@table)
+			@user3.sit(@table)
+			@user4.sit(@table)
+			@user5.sit(@table)
+			@table.full_table?.should == true
+		end
+	end
+
 	describe "populate_seats" do
 		it "should add the number of seats to the table based on its game" do
 			@table.game.name.should == 'blackjack'
@@ -45,6 +58,8 @@ describe Table do
 			@table.seats.first.number.should == 1
 		end
 	end
+
+
 
 	describe "player_count" do
 		it "should determine the number of players at a table" do

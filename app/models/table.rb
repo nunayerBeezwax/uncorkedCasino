@@ -9,6 +9,10 @@ class Table < ActiveRecord::Base
 		return 5 if self.game.name == "blackjack" 		
 	end
 
+	def full_table?
+		self.vacancies.length == 0
+	end
+
 
 	def populate_seats
 		seat_qty.times { |n| self.seats << Seat.create(number: n+1 ) }
@@ -16,6 +20,10 @@ class Table < ActiveRecord::Base
 
 	def player_count
 		self.users.length
+	end
+
+	def game_name
+		self.game.name
 	end
 
 	def vacancies

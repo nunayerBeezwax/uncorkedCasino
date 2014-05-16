@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   attr_accessor :login
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  validates :email, presence: true, length: { minimum: 3, maximum: 40 }
+  validates :email, presence: true, length: { minimum: 3, maximum: 50 }
   validates :email, uniqueness: true
   validates :username, :uniqueness => { :case_sensitive => false }
   has_one :api_key
@@ -20,6 +20,17 @@ class User < ActiveRecord::Base
     end
   end
 
+  def first_open(game)
+    matching_tables =[]
+    Table.all.each do |t|
+      if t.game_name == game
+        matching_tables << t
+      end
+    end
+
+    matching_tables.reject{ |t| t.full_table?  }
+    self.sit(matching_tables.first)
+  end
 
   def set_gravatar_url
     hash = Digest::MD5.hexdigest(self.email.downcase.strip)

@@ -12,6 +12,11 @@ module Api
 					end
 				end
 				render json: report.to_json.to_s.gsub!(/\"/, '\'')
+			elsif params[:playgame] == "blackjack"
+				requestors_key = ApiKey.find_by(access_token: params[:token])
+				requestor = User.find(requestors_key.user_id)
+				requestor.first_open(params[:playgame])
+				render json: requestor.seat.table.to_json
 			end
 		end
 	end

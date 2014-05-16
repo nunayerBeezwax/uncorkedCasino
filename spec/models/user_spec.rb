@@ -53,6 +53,12 @@ end
 			@user2.sit(@table, 2).should == true
 		end
 	end
+	describe "first_open" do
+		it "should allow the user to just pick a game and get the first open seat" do
+			@user1.first_open('blackjack')
+			@user1.seat.table.game.name.should == "blackjack"
+		end
+	end
 end
 
 
