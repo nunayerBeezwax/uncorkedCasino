@@ -43,7 +43,6 @@ end
 
 	describe "sit" do
 		it "should allow a user to sit a table" do
-			@table.populate_seats
 			@user1.sit(@table)
 			@user1.seat.table.game.name.should == "blackjack"
 		end

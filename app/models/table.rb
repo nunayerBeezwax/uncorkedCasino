@@ -4,9 +4,11 @@ class Table < ActiveRecord::Base
 	has_many :decks
 	has_many :users, through: :seats
 
+
 	def seat_qty
 		return 5 if self.game.name == "blackjack" 		
 	end
+
 
 	def populate_seats
 		seat_qty.times { |n| self.seats << Seat.create(number: n+1 ) }

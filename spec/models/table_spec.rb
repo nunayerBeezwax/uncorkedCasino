@@ -26,6 +26,7 @@ describe Table do
 		it "should return the vacant seats at a table" do
 			@user1.sit(@table)
 			@table.vacancies.first.number.should == 2
+			@table.vacancies.length.should == 4
 		end
 	end
 

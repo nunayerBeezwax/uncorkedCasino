@@ -7,14 +7,22 @@ resource 'houses' do
 before(:each) do
   ApplicationController.any_instance.stub(:restrict_access => true)
   @house = House.create
-  @user = User.create
-  @user1 = User.create
-  @user2 = User.create
-  @user3 = User.create
-  @user4 = User.create
+  @user = FactoryGirl.create(:user)
+  @user1 = FactoryGirl.create(:user)
+  @user2 = FactoryGirl.create(:user)
+  @user3 = FactoryGirl.create(:user)
+  @user4 = FactoryGirl.create(:user)
   @house.games << Game.create(name: "blackjack")
-  @house.games.first.tables << Table.create
-
+  @table1 = Table.create(number: 1)
+  @table2 = Table.create(number: 2)
+  @house.games.first.tables << @table1
+  @house.games.first.tables << @table2
+  @table1.populate_seats
+  @table2.populate_seats
+	@user1.sit(@table1)
+	@user2.sit(@table1)
+	@user3.sit(@table1)
+	@user4.sit(@table2)
 end
 
 	get '/api/houses' do
@@ -26,10 +34,9 @@ end
 	end
 
 	get '/api/houses' do
-		example "Get a list of open tables for a specific game" do
+		example "Get a list of vacancies for a specific game" do
 			do_request({:games => 'blackjack'})
-			response_status.should == 200
-			response_body.should include "blackjack"
+			response_body.should include "{'Table #1':'3/5','Table #2':'1/5'}"
 		end
 	end
 end
