@@ -4,7 +4,11 @@ module Api
 
 		def show
 			@user = User.find(params[:id])
-			render json: @user
+			if @user.seated?
+				render json: @user.state
+			else
+				render json: @user
+			end
 		end
 
 		def update

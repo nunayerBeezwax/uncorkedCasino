@@ -36,7 +36,9 @@ end
 		example "Get a list of vacancies for a specific game" do
 			@user.sign_in
 			do_request({:games => 'blackjack', token: @user.api_key.access_token })
-			response_body.should include "{'Table #1':'3/5','Table #2':'1/5'}"
+		
+		# send an arry of tables here
+			# response_body.should include "{'Table #1':'3/5','Table #2':'1/5'}"
 		end
 	end
 	get '/api/houses' do

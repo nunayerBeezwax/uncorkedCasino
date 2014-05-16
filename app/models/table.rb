@@ -102,10 +102,6 @@ class Table < ActiveRecord::Base
 		return true if hand.inject(:+) > 21
 	end
 
-	def seat_qty
-		return 5 if self.game.name == "blackjack" 		
-	end
-
 	def player_count
 		self.users.count
 	end

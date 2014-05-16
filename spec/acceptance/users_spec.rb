@@ -5,6 +5,22 @@ resource "Users" do
 
 before(:each) do
   ApplicationController.any_instance.stub(:restrict_access => true)
+  @house = House.create
+  @user = FactoryGirl.create(:user)
+  @user1 = FactoryGirl.create(:user)
+  @user2 = FactoryGirl.create(:user)
+  @user3 = FactoryGirl.create(:user)
+  @user4 = FactoryGirl.create(:user)
+  @house.games << Game.create(name: "blackjack")
+  @table1 = Table.create(number: 1)
+  @table2 = Table.create(number: 2)
+  @house.games.first.tables << @table1
+  @house.games.first.tables << @table2
+  @table1.populate_seats
+	@user1.sit(@table1)
+	@user2.sit(@table1)
+	@user3.sit(@table1)
+	@user4.sit(@table2)
 end
 
 # auth not required for signup obviously
@@ -17,13 +33,22 @@ end
 		end
 	end
 
+	# get '/api/users/:id' do
+	# 	example "Get the state of a user" do
+	# 		user = FactoryGirl.create(:user)
+	# 		do_request({:id => user.id})
+	# 		response_body.should == user.to_json		
+	# 	end
+	# end
+
 	get '/api/users/:id' do
-		example "Get the state of a user" do
-			user = FactoryGirl.create(:user)
-			do_request({:id => user.id})
-			response_body.should == user.to_json		
+		example "Get the state of a user when they are in a game" do
+			@user1.sign_in
+			do_request({:id => @user1.id})
+			response_body.should include @user.state.to_json
 		end
 	end
+
 	patch '/api/users/:id' do
 		example "Edit a users profile" do
 			user = FactoryGirl.create(:user)
@@ -32,13 +57,12 @@ end
 		end
 	end
 
-
 	delete '/api/users/:id' do
 		example "destroy a user" do
 			user = FactoryGirl.create(:user)
 			do_request({:id => user.id})
 			response_status.should == 204
-			User.all.should == []
+			User.all.should_not include user
 		end
 	end
 end

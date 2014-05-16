@@ -17,6 +17,8 @@ before(:each) do
 	@user1.sit(@table)
 end
 
+
+
 	describe "set_gravatar_url" do
 		it "should set the url of the users gravatar after creation" do
 			user = User.create(email: "danieladammiller@gmail.com", username: "dand")
@@ -32,6 +34,14 @@ end
 			user.signed_in?.should == true
 		end
 	end
+
+	describe "seated" do
+		it "returns true if a user is seated" do
+			@user1.seated?.should == true
+			@user2.seated?.should == false
+		end
+	end
+
 	describe "sign_out" do
 		it "should destroy the users api_key" do
 			user = User.create(email: "danieladammiller@gmail.com", username: "dand")

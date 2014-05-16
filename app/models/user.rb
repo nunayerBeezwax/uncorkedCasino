@@ -21,6 +21,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def seated?
+    !self.seat.nil?
+  end
+
   def leave_table
     self.update(seat: nil)
   end
@@ -34,6 +38,16 @@ class User < ActiveRecord::Base
     end
     matching_tables.reject{ |t| t.full_table?  }
     self.sit(matching_tables.first)
+  end
+
+  def state
+    {"table #" => self.seat.table.number,
+     "Game name" => self.seat.table.game.name,
+     "hand" => self.seat.cards,
+     "House cards" => self.seat.table.house_cards,
+     "limit" => self.seat.table.limit,
+     "action" => self.seat.table.action
+    } 
   end
 
 
