@@ -8,6 +8,7 @@ describe Table do
 		before(:each) do
 			@house = House.create
 			@game = FactoryGirl.create(:game)
+			@game.update(house_id: @house.id)
 			@table = Table.create(game_id: @game.id)
 			@user1 = FactoryGirl.create(:user)
 			@user2 = FactoryGirl.create(:user)
@@ -59,7 +60,7 @@ describe Table do
 		  @user1.seat.cards << Card.new(suit: 'h', rank: 8)
 			@table.hit(@user1)
 			@user1.seat.cards.count.should eq 0
-			@table.game.house.bank.should eq 1000005
+			@table.game.house.bank.should == 1000005
 		end
 	end
 
