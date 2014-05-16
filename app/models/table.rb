@@ -4,7 +4,7 @@ class Table < ActiveRecord::Base
 	has_many :users, through: :seats
 	before_create :setup
 
-
+	attr_reader :house_cards, :limit, :shoe, :action
 
 	def seat_qty
 		return 5 if self.game.name == "blackjack" 		
@@ -16,8 +16,8 @@ class Table < ActiveRecord::Base
 
 	def populate_seats
 		seat_qty.times { |n| self.seats << Seat.create(number: n+1 ) }
-
-	attr_reader :house_cards, :limit, :shoe, :action
+	end
+	
 
 ### Table setup 
 

@@ -14,14 +14,13 @@ class User < ActiveRecord::Base
   def sit(table, seatnumber=nil)
     if seatnumber == nil
       table.first_vacant.update(user_id: self.id)
-    elsif table.seats[seatnumber-1].occupied?
+    elsif table.seats[seatnumber].occupied?
       false
     else
       table.vacancies[seatnumber].update(user_id: self.id)
     end
   end
 
-<<<<<<< HEAD
   def leave_table
     self.update(seat: nil)
   end
@@ -36,9 +35,7 @@ class User < ActiveRecord::Base
     matching_tables.reject{ |t| t.full_table?  }
     self.sit(matching_tables.first)
   end
-=======
-  #helper methods
->>>>>>> d7819f758875fc5708a92e2ac953cd5bb340c9c4
+
 
   def set_gravatar_url
     hash = Digest::MD5.hexdigest(self.email.downcase.strip)

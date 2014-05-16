@@ -14,8 +14,7 @@ describe Table do
 			@user3 = FactoryGirl.create(:user)
 			@user4 = FactoryGirl.create(:user)
 			@user5 = FactoryGirl.create(:user)
-<<<<<<< HEAD
-=======
+
 		end
 
 	describe "bet" do 
@@ -35,7 +34,6 @@ describe Table do
 			@table.bet(@user1, 5)
 			@table.deal
 			@table.action.should eq 1
->>>>>>> d7819f758875fc5708a92e2ac953cd5bb340c9c4
 		end
 	end
 
@@ -77,12 +75,9 @@ describe Table do
 			@user1.sit(@table)
 			@table.vacancies.count.should eq 4
 			@table.vacancies.first.number.should == 2
-<<<<<<< HEAD
 			@table.vacancies.length.should == 4
-=======
 			@user2.sit(@table)
 			@table.vacancies.count.should eq 3
->>>>>>> d7819f758875fc5708a92e2ac953cd5bb340c9c4
 		end
 	end
 
@@ -93,7 +88,6 @@ describe Table do
 		end
 	end
 
-<<<<<<< HEAD
 	describe "full_table?" do
 		it "is true if a table is full" do
 			@user1.sit(@table)
@@ -114,8 +108,6 @@ describe Table do
 		end
 	end
 
-=======
->>>>>>> d7819f758875fc5708a92e2ac953cd5bb340c9c4
 	describe "player_count" do
 		it "should determine the number of players at a table" do
 			@user1.sit(@table)

@@ -3,6 +3,7 @@ require 'spec_helper'
 describe User do
 
 it { should have_one :seat }
+it { should have_one :table }
 
 before(:each) do
 	@house = House.create
@@ -16,17 +17,6 @@ before(:each) do
 	@user1.sit(@table)
 end
 
-
-it { should have_one :table }
-
-	before(:each) do
-		@house = House.create
-		@game = FactoryGirl.create(:game)
-		@table = Table.create(game_id: @game.id)
-		@user1 = FactoryGirl.create(:user)
-		@user2 = FactoryGirl.create(:user)
-		@user3 = FactoryGirl.create(:user)
-	end
 	describe "set_gravatar_url" do
 		it "should set the url of the users gravatar after creation" do
 			user = User.create(email: "danieladammiller@gmail.com", username: "dand")
@@ -65,15 +55,10 @@ it { should have_one :table }
 			@user1.seat.table.game.name.should == "blackjack"
 		end
 		it "should allow a user to specify what seat they want and not allow a user to sit in an occupied seat" do
-
-			@user1.sit(@table)
-			@user1.table.should eq @table
-			@user1.seat.table.game.name.should == "blackjack"
-		end
-		it "should allow a user to specify what seat they want and not allow a user to sit in an occupied seat" do
 			@user1.sit(@table)
 			@user2.sit(@table, 1).should == false
-			@user2.sit(@table, 2).should == true
+			@user2.sit(@table, 2)
+			@user2.seat.table.should == @table
 		end
 	end
 
