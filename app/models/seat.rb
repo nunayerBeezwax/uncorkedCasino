@@ -14,6 +14,5 @@ class Seat < ActiveRecord::Base
 	def in_hand?
 		self.placed_bet > 0
 	end
-
 end
 

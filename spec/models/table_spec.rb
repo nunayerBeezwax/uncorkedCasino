@@ -8,6 +8,7 @@ describe Table do
 		before(:each) do
 			@house = House.create
 			@game = FactoryGirl.create(:game)
+			@game.update(house_id: @house.id)
 			@table = Table.create(game_id: @game.id)
 			@user1 = FactoryGirl.create(:user)
 			@user2 = FactoryGirl.create(:user)
@@ -15,6 +16,18 @@ describe Table do
 			@user4 = FactoryGirl.create(:user)
 			@user5 = FactoryGirl.create(:user)
 		end
+
+	describe "draw" do
+		it "makes a hand for the dealer, hitting until greater than 16 or bust" do
+			@table.house_cards << Card.new(rank: 8)
+			@table.house_cards << Card.new(rank: 12)
+			@table.draw.should eq 18
+		end
+		it "can draw cards if short" do
+			@table.deal
+			@table.draw.should > 16 || winner
+		end
+	end
 
 	describe "bet" do 
 		it "allows a player to place a bet, removes their chips, qualifies them to be in hand" do
@@ -27,27 +40,38 @@ describe Table do
 		end
 	end
 
-	describe "action" do
+	describe "first_to_act" do
 		it "starts at the first seat with a placed bet after deal" do
 			@user1.sit(@table)
 			@table.bet(@user1, 5)
-			@table.deal
-			@table.action.should eq 1
+			@table.deal.should eq 1
 		end
 	end
 
-	# describe "stand" do
-	# 	it "allows players to stand, moves action to next player in hand" do
-	# 		@user1.sit(@table)
-	# 		@user2.sit(@table)
-	# 		@table.bet(@user1, 5)
-	# 		@table.bet(@user2, 5)
-	# 		@table.deal
-	# 		@table.action.should eq 1
-	# 		@table.stand(@user1)
-	# 		@table.action.should eq 2
-	# 	end
-	# end
+	describe "action_on" do
+		it "marks which seat's turn it is" do
+			@user1.sit(@table)
+			@user2.sit(@table)
+			@table.bet(@user1, 5)
+			@table.bet(@user2, 5)
+			@table.deal.should eq 1
+			@table.stand(@user1).should eq 2
+		end
+	end
+
+	describe "stand" do
+		it "allows players to stand, moves action to next player in hand" do
+			@user1.sit(@table)
+			@user2.sit(@table)
+			@user3.sit(@table)
+			@table.bet(@user1, 5)
+			@table.bet(@user2, 5)
+			@table.bet(@user3, 5)
+			@table.deal.should eq 1
+			@table.stand(@user1).should eq 2
+			@table.stand(@user2).should eq 3
+		end
+	end
 
 	describe "hit" do
 		it "gives another card when a user requests a hit, then checks for bust" do
