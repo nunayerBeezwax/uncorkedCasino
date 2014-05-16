@@ -16,6 +16,7 @@ end
 			response_body.should == User.all.last.to_json
 		end
 	end
+
 	get '/api/users/:id' do
 		example "Get the state of a user" do
 			user = FactoryGirl.create(:user)
@@ -30,6 +31,8 @@ end
 			response_body.should include "jenny"
 		end
 	end
+
+
 	delete '/api/users/:id' do
 		example "destroy a user" do
 			user = FactoryGirl.create(:user)

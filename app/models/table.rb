@@ -13,7 +13,6 @@ class Table < ActiveRecord::Base
 		self.vacancies.length == 0
 	end
 
-
 	def populate_seats
 		seat_qty.times { |n| self.seats << Seat.create(number: n+1 ) }
 	end

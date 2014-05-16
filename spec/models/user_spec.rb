@@ -51,6 +51,14 @@ end
 			@user2.sit(@table, 2).should == true
 		end
 	end
+
+	describe "leave_table" do
+		it "should allow the user to leave a table" do
+			@user1.leave_table
+			@user1.seat.should == nil
+		end
+	end
+
 	describe "first_open" do
 		it "should allow the user to just pick a game and get the first open seat" do
 			@user1.first_open('blackjack')

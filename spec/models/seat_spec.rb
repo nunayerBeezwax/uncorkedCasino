@@ -20,7 +20,7 @@ describe Seat do
 	describe "occupied?" do
 		it "returns true if a seat is occupied by a user" do
 			@user1.sit(@table)
-			@table.seats.first.occupied?.should == true
+			@table.seats.sort.first.occupied?.should == true
 			@table.seats.last.occupied?.should == false
 		end
 	end

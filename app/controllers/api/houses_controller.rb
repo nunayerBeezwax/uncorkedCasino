@@ -1,6 +1,7 @@
 module Api
 	class HousesController < ApplicationController
 		respond_to :json
+		before_filter :identify_user
 		def index
 			if params[:games] == 'all'
 				render json: House.first.games
@@ -13,10 +14,16 @@ module Api
 				end
 				render json: report.to_json.to_s.gsub!(/\"/, '\'')
 			elsif params[:playgame] == "blackjack"
-				requestor = ApiKey.find_by(access_token: params[:token]).user
-				requestor.first_open(params[:playgame])
-				render json: requestor.seat.table.to_json
+				identify_user.first_open(params[:playgame])
+				render json: identify_user.seat.table.to_json
+			elsif params[:leavegame] == 'all'
+				identify_user.leave_table
+				render json: identify_user.to_json
 			end
+		end
+
+		def identify_user
+			ApiKey.find_by(access_token: params[:token]).user
 		end
 	end
 end

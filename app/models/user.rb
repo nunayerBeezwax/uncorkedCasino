@@ -20,6 +20,10 @@ class User < ActiveRecord::Base
     end
   end
 
+  def leave_table
+    self.update(seat: nil)
+  end
+
   def first_open(game)
     matching_tables =[]
     Table.all.each do |t|
@@ -27,7 +31,6 @@ class User < ActiveRecord::Base
         matching_tables << t
       end
     end
-
     matching_tables.reject{ |t| t.full_table?  }
     self.sit(matching_tables.first)
   end

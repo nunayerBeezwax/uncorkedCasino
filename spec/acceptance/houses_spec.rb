@@ -27,7 +27,8 @@ end
 
 	get '/api/houses' do
 		example "Get a list of all the games being played" do
-			do_request({:games => 'all'})
+			@user.sign_in
+			do_request({:games => 'all', token: @user.api_key.access_token })
 			response_status.should == 200
 			response_body.should include "blackjack"
 		end
@@ -35,7 +36,8 @@ end
 
 	get '/api/houses' do
 		example "Get a list of vacancies for a specific game" do
-			do_request({:games => 'blackjack'})
+			@user.sign_in
+			do_request({:games => 'blackjack', token: @user.api_key.access_token })
 			response_body.should include "{'Table #1':'3/5','Table #2':'1/5'}"
 		end
 	end
@@ -45,6 +47,14 @@ end
 			do_request({:playgame => 'blackjack', token: @user.api_key.access_token})
 			# need a current_user helper method
 			response_body.should include @table1.to_json
+		end
+	end
+	get '/api/houses' do
+		example "leave current table" do
+			@user.sign_in
+			do_request({leavegame: 'all', token: @user.api_key.access_token})
+			@user.seat.should == nil
+			response_body.should include @user.to_json
 		end
 	end
 end
