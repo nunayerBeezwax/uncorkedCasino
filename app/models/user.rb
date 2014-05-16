@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   attr_accessor :login
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
-  validates :email, presence: true, length: { minimum: 3, maximum: 40 }
+  validates :email, presence: true, length: { minimum: 3, maximum: 50 }
   validates :email, uniqueness: true
   validates :username, :uniqueness => { :case_sensitive => false }
   has_one :api_key
@@ -19,22 +19,6 @@ class User < ActiveRecord::Base
     else
       table.vacancies[seatnumber].update(user_id: self.id)
     end
-  end
-
-  def bet(amount)
-    ##strange thing where @table has limit but @user.table doesn't...
-    # if amount.between?(self.table.limit[0], self.table.limit[1])
-      self.chips -= amount
-      self.seat.place_bet(amount)
-    # end
-  end
-
-  def hit
-    self.table.deal_card(self)
-  end
-
-  def stand
-    self.table.action += 1
   end
 
   #helper methods

@@ -2,19 +2,18 @@ class Table < ActiveRecord::Base
 	belongs_to :game
 	has_many :seats
 	has_many :users, through: :seats
-	has_one :shoe
-	after_create :setup
+	before_create :setup
 
-	attr_reader :rack, :house_cards, :limit
+	attr_reader :house_cards, :limit, :shoe, :action
 
 ### Table setup 
 
 	def setup
 		@house_cards = []
 		@limit = [5, 10]
-		Shoe.create(table_id: self.id)
-		seat_qty.times do |i|
-			self.seats << Seat.create(table_id: self.id, number: i + 1  )
+		@shoe = []
+		5.times do |i|
+			self.seats << Seat.create( number: i + 1  )
 		end
 		fill_shoe
 	end
@@ -23,46 +22,53 @@ class Table < ActiveRecord::Base
 		decks.times do
 			deck = Deck.create
 			deck.cards.each do |card|
-				self.shoe.cards << card
+				self.shoe << card
 			end
 		end
-		rack_em
-	end
-
-	def rack_em
-		@rack = []
-		self.shoe.cards.each do |card|
-			@rack << card
-		end
-		@rack.shuffle!
+		self.shoe.shuffle!
 	end
 
 ### Action methods
 
+  def bet(user, amount)
+    if amount.between?(self.limit[0], self.limit[1])
+      user.chips -= amount
+			user.seat.place_bet(amount)
+	    else 
+    	## throw a "bet must be between..." error
+    end
+  end
+
 	def deal
 		self.seats.each do |seat|
 			if seat.occupied?
-				2.times { seat.cards << @rack.shift }
+				2.times { seat.cards << @shoe.shift }
 			end
 		end
-		2.times { self.house_cards << @rack.shift }
+		2.times { self.house_cards << @shoe.shift }
+		## if !dealer_blackjack
+		# action
 	end
 
-	def deal_card(user)
-		self.user.seat.cards << @rack.shift
-		hand = make_hand(self.user.seat.cards)
+	def action
+		self.users.each { |user| return user.seat.number if user.seat.in_hand? }
+	end
+
+	def hit(user)
+		user.seat.cards << self.shoe.shift
+		hand = make_hand(user.seat.cards)
 		if bust(hand) 
 			user.seat.cards = []
-			house.chips += user.seat.bet_placed 
-			user.seat.bet_placed(0)		
+			self.game.house.bank += user.seat.placed_bet
+			user.seat.place_bet(0)		
 		else
 			## Throw it back to the user to decide again
 		end
 	end
 
-	def bust(hand)
-		return true if hand.inject(:+) > 21
-	end
+  # def stand(user)
+  #   user.seat.standing
+  # end
 
 	def make_hand(cards)
 		hand = []
@@ -76,14 +82,19 @@ class Table < ActiveRecord::Base
 		hand
 	end
 
+
 ### Table state methods
+
+	def bust(hand)
+		return true if hand.inject(:+) > 21
+	end
 
 	def seat_qty
 		return 5 if self.game.name == "blackjack" 		
 	end
 
 	def player_count
-		self.users.length
+		self.users.count
 	end
 
 	def vacancies

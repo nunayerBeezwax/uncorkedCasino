@@ -3,18 +3,64 @@ require 'spec_helper'
 ## When run individually the tests pass, they fail when run together
 
 describe Table do
-  	it { should have_one :shoe }
 		it { should have_many :seats }
 
 		before(:each) do
 			@house = House.create
 			@game = FactoryGirl.create(:game)
-			@table = FactoryGirl.create(:table)
-			@table.update(game_id: @game.id)
+			@table = Table.create(game_id: @game.id)
 			@user1 = FactoryGirl.create(:user)
 			@user2 = FactoryGirl.create(:user)
 			@user3 = FactoryGirl.create(:user)
+			@user4 = FactoryGirl.create(:user)
+			@user5 = FactoryGirl.create(:user)
 		end
+
+	describe "bet" do 
+		it "allows a player to place a bet, removes their chips, qualifies them to be in hand" do
+			@user1.sit(@table)
+			@user2.sit(@table)
+			@user3.sit(@table)
+			@table.bet(@user1, 5)
+			@user1.chips.should == 495
+			@user1.seat.placed_bet.should eq 5
+		end
+	end
+
+	describe "action" do
+		it "starts at the first seat with a placed bet after deal" do
+			@user1.sit(@table)
+			@table.bet(@user1, 5)
+			@table.deal
+			@table.action.should eq 1
+		end
+	end
+
+	# describe "stand" do
+	# 	it "allows players to stand, moves action to next player in hand" do
+	# 		@user1.sit(@table)
+	# 		@user2.sit(@table)
+	# 		@table.bet(@user1, 5)
+	# 		@table.bet(@user2, 5)
+	# 		@table.deal
+	# 		@table.action.should eq 1
+	# 		@table.stand(@user1)
+	# 		@table.action.should eq 2
+	# 	end
+	# end
+
+	describe "hit" do
+		it "gives another card when a user requests a hit, then checks for bust" do
+			@user1.sit(@table)
+			@table.bet(@user1, 5)
+		  @user1.seat.cards << Card.new(suit: 'h', rank: 13)
+		  @user1.seat.cards << Card.new(suit: 'h', rank: 9)
+		  @user1.seat.cards << Card.new(suit: 'h', rank: 8)
+			@table.hit(@user1)
+			@user1.seat.cards.count.should eq 0
+			@table.game.house.bank.should eq 1000005
+		end
+	end
 
 	describe "seat_qty" do
 		it "should determine the number of seats at a table based on the game" do
@@ -26,7 +72,10 @@ describe Table do
 	describe "vacancies" do
 		it "should return the vacant seats at a table" do
 			@user1.sit(@table)
+			@table.vacancies.count.should eq 4
 			@table.vacancies.first.number.should == 2
+			@user2.sit(@table)
+			@table.vacancies.count.should eq 3
 		end
 	end
 
@@ -41,20 +90,22 @@ describe Table do
 		it "should determine the number of players at a table" do
 			@user1.sit(@table)
 			@table.player_count.should == 1
+			@user2.sit(@table)
+			@user3.sit(@table)
+			@table.player_count.should == 3
 		end
 	end
 
 	describe "#setup" do
 		it "prepares a table for blackjack - makes seats and shoe" do
 			@table.seats.count.should eq 5
-			@table.seats.last.number.should == 5
+			@table.seats.last.number.should eq 5
 		end
 	end
 
 	describe "#fill_shoe" do 
 		it "takes a number of decks (default 1) and puts the cards in that table's shoe" do
-			@table.shoe.cards.count.should eq 52
-			@table.rack.count.should eq 52
+			@table.shoe.count.should eq 52
 		end
 	end
 
