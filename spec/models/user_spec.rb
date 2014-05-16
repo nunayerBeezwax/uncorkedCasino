@@ -47,7 +47,6 @@ end
 			@user1.seat.table.game.name.should == "blackjack"
 		end
 		it "should allow a user to specify what seat they want and not allow a user to sit in an occupied seat" do
-			
 			@user2.sit(@table, 1).should == false
 			@user2.sit(@table, 2).should == true
 		end

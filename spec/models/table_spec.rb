@@ -59,8 +59,6 @@ describe Table do
 		end
 	end
 
-
-
 	describe "player_count" do
 		it "should determine the number of players at a table" do
 			@user1.sit(@table)
