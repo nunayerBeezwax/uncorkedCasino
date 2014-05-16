@@ -25,8 +25,16 @@ describe Seat do
 	describe "in_hand?" do
 		it "returns true if a player is currently in the hand" do
 			@user1.sit(@table)
+			@user2.sit(@table)
 			@table.bet(@user1, 5)
 			@user1.seat.in_hand?.should eq true
+			@user2.seat.in_hand?.should eq false
+
+			### This is the method access non-identity bug
+			### the two references equate, but return differing results
+
+			# @user1.seat.should eq @table.seats[0]
+			# @table.seats[0].in_hand?.should eq true
 		end
 	end
 end

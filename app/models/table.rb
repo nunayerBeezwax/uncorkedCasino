@@ -4,7 +4,7 @@ class Table < ActiveRecord::Base
 	has_many :users, through: :seats
 	before_create :setup
 
-	attr_reader :house_cards, :limit, :shoe, :action
+	attr_reader :house_cards, :limit, :shoe, :action, :action_on
 
 	def seat_qty
 		return 5 if self.game.name == "blackjack" 		
@@ -43,6 +43,10 @@ class Table < ActiveRecord::Base
 
 ### Action methods
 
+	def action(seats_array)
+		seats_array.sort.first
+	end
+
   def bet(user, amount)
     if amount.between?(self.limit[0], self.limit[1])
       user.chips -= amount
@@ -60,11 +64,17 @@ class Table < ActiveRecord::Base
 		end
 		2.times { self.house_cards << @shoe.shift }
 		## if !dealer_blackjack
-		# action
+		action(first_to_act)
 	end
 
-	def action
-		self.users.each { |user| return user.seat.number if user.seat.in_hand? }
+	def first_to_act
+		fta = []
+		self.users.each do |user| 
+			if user.seat.in_hand?
+				fta << user.seat.number 
+			end
+		end
+		fta
 	end
 
 	def hit(user)
@@ -73,15 +83,22 @@ class Table < ActiveRecord::Base
 		if bust(hand) 
 			user.seat.cards = []
 			self.game.house.bank += user.seat.placed_bet
-			user.seat.place_bet(0)		
+			user.seat.place_bet(0)
+			stand(user)		
 		else
 			## Throw it back to the user to decide again
 		end
 	end
 
-  # def stand(user)
-  #   user.seat.standing
-  # end
+  def stand(user)
+  	next_to_act = []
+  	self.users.each do |u|
+	    if u.seat.in_hand? && u.seat.number > user.seat.number
+	    	next_to_act << u.seat.number
+	    end
+  	end
+  	action(next_to_act)
+  end
 
 	def make_hand(cards)
 		hand = []
@@ -95,8 +112,46 @@ class Table < ActiveRecord::Base
 		hand
 	end
 
+	def draw
+		hand = make_hand(@house_cards)
+		if bust(hand)
+			winner
+		else
+			if hand.inject(:+) <= 16 
+				@house_cards << @shoe.shift
+				draw
+			else
+				hand.inject(:+)
+			end
+		end
+	end
 
 ### Table state methods
+
+	def winner
+		self.users.each do |user|
+			user.chips += user.seat.placed_bet * 2
+		end
+	end
+
+	def showdown
+		self.users.each do |user|
+			if make_hand(user.seat.cards) < draw
+				user.chips += user.seat.placed_bet * 2
+				user.seat.update(placed_bet: 0)
+				## return win message(?)
+			elsif make_hand(user.seat.cards) == draw
+				user.chips += user.seat.placed_bet
+				user.seat.update(placed_bet: 0)
+				## return push message(?)
+			else
+
+				self.game.house.bank += user.seat.placed_bet
+				user.seat.update(placed_bet: 0)
+				## return loss message(?)
+			end
+		end
+	end
 
 	def bust(hand)
 		return true if hand.inject(:+) > 21
