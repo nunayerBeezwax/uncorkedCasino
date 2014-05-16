@@ -39,4 +39,12 @@ end
 			response_body.should include "{'Table #1':'3/5','Table #2':'1/5'}"
 		end
 	end
+	get '/api/houses' do
+		example "Play a game" do
+			@user.sign_in
+			do_request({:playgame => 'blackjack', token: @user.api_key.access_token})
+			# need a current_user helper method
+			response_body.should include @table1.to_json
+		end
+	end
 end
