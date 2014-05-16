@@ -13,6 +13,7 @@ before(:each) do
 	@user1 = FactoryGirl.create(:user)
 	@user2 = FactoryGirl.create(:user)
 	@user3 = FactoryGirl.create(:user)
+	@user1.sit(@table)
 end
 
 
@@ -43,12 +44,10 @@ end
 
 	describe "sit" do
 		it "should allow a user to sit a table" do
-			@user1.sit(@table)
 			@user1.seat.table.game.name.should == "blackjack"
 		end
 		it "should allow a user to specify what seat they want and not allow a user to sit in an occupied seat" do
-			@table.populate_seats
-			@user1.sit(@table)
+			
 			@user2.sit(@table, 1).should == false
 			@user2.sit(@table, 2).should == true
 		end

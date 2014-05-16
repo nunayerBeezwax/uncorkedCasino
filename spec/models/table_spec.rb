@@ -54,7 +54,7 @@ describe Table do
 		it "should add the number of seats to the table based on its game" do
 			@table.game.name.should == 'blackjack'
 			@table.seats.length.should == 5
-			@table.seats.last.number.should == 5
+			@table.seats.sort.last.number.should == 5
 			@table.seats.first.number.should == 1
 		end
 	end
