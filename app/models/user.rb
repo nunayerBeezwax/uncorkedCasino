@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   validates :username, :uniqueness => { :case_sensitive => false }
   has_one :api_key
   has_one :seat
+  has_one :table, through: :seat
 
   def sit(table, seatnumber=nil)
     if seatnumber == nil
@@ -20,6 +21,7 @@ class User < ActiveRecord::Base
     end
   end
 
+<<<<<<< HEAD
   def leave_table
     self.update(seat: nil)
   end
@@ -34,13 +36,14 @@ class User < ActiveRecord::Base
     matching_tables.reject{ |t| t.full_table?  }
     self.sit(matching_tables.first)
   end
+=======
+  #helper methods
+>>>>>>> d7819f758875fc5708a92e2ac953cd5bb340c9c4
 
   def set_gravatar_url
     hash = Digest::MD5.hexdigest(self.email.downcase.strip)
     update_attributes(gravatar_url: "http://gravatar.com/avatar/#{hash}") 
   end
-
-  #helper methods
 
   def sign_in
     ApiKey.create(user_id: self.id)
