@@ -41,12 +41,13 @@ class User < ActiveRecord::Base
   end
 
   def state
+    binding.pry
     {"table #" => self.seat.table.number,
      "Game name" => self.seat.table.game.name,
      "hand" => self.seat.cards,
      "House cards" => self.seat.table.house_cards,
      "limit" => self.seat.table.limit,
-     "action" => self.seat.table.action
+     "action" => self.seat.table.action([self.seat.number])
     } 
   end
 

@@ -18,6 +18,15 @@ describe Table do
 
 		end
 
+	describe "#blackjack" do
+		it "returns true if a hand is a blackjack" do
+			@user1.sit(@table)
+			@user1.seat.cards << Card.new(suit: "h", rank: 1)
+			@user1.seat.cards << Card.new(suit: "h", rank: 13)
+			@table.blackjack(@user1.seat.cards).should eq true
+		end
+	end	
+
 	describe "draw" do
 		it "makes a hand for the dealer, hitting until greater than 16 or bust" do
 			@table.house_cards << Card.new(rank: 8)
@@ -26,7 +35,7 @@ describe Table do
 		end
 		it "can draw cards if short" do
 			@table.deal
-			@table.draw.should > 16 || winner
+			@table.draw.should > 16 || []
 		end
 	end
 
@@ -175,8 +184,21 @@ describe Table do
 			@user1.seat.cards << Card.new(suit: "h", rank: 9)
 			@user1.seat.cards << Card.new(suit: "h", rank: 10)
 			@user1.seat.cards << Card.new(suit: "h", rank: 13)
-			hand = @table.make_hand(@user1.seat.cards)
+			hand = @table.handify(@user1.seat.cards)
 			@table.bust(hand).should eq true
+		end
+	end
+
+	describe "#handify" do 
+		it "takes in cards and returns a sorted array of integers, 10 maximum" do 
+			@user1.sit(@table)
+			@user1.seat.cards << Card.new(rank: 10)
+			@user1.seat.cards << Card.new(rank: 12)
+			@user1.seat.cards << Card.new(rank: 13)
+			@user1.seat.cards << Card.new(rank: 1)
+			@user1.seat.cards << Card.new(rank: 9)
+			@user1.seat.cards << Card.new(rank: 11)
+			@table.handify(@user1.seat.cards).should eq [1,9,10,10,10,10]
 		end
 	end
 end

@@ -51,7 +51,7 @@ class Table < ActiveRecord::Base
     if amount.between?(self.limit[0], self.limit[1])
       user.chips -= amount
 			user.seat.place_bet(amount)
-	    else 
+	  else 
     	## throw a "bet must be between..." error
     end
   end
@@ -63,8 +63,10 @@ class Table < ActiveRecord::Base
 			end
 		end
 		2.times { self.house_cards << @shoe.shift }
-		## if !dealer_blackjack
-		action(first_to_act)
+		if !blackjack(house_cards)
+			action(first_to_act)
+		##  else go to house blackjack payouts
+		end
 	end
 
 	def first_to_act
@@ -79,7 +81,7 @@ class Table < ActiveRecord::Base
 
 	def hit(user)
 		user.seat.cards << self.shoe.shift
-		hand = make_hand(user.seat.cards)
+		hand = handify(user.seat.cards)
 		if bust(hand) 
 			user.seat.cards = []
 			self.game.house.bank += user.seat.placed_bet
@@ -100,20 +102,12 @@ class Table < ActiveRecord::Base
   	action(next_to_act)
   end
 
-	def make_hand(cards)
-		hand = []
-		cards.each do |card|
-			if card.rank.between?(10, 13)
-				hand << 10
-			else
-				hand << card.rank
-			end
-		end
-		hand
+	def handify(cards)
+		cards.map { |card| card.rank.between?(10,13) ? 10 : card.rank }.sort
 	end
 
 	def draw
-		hand = make_hand(@house_cards)
+		hand = handify(@house_cards)
 		if bust(hand)
 			winner
 		else
@@ -124,23 +118,36 @@ class Table < ActiveRecord::Base
 				hand.inject(:+)
 			end
 		end
+		handify(@house_cards).inject(:+)
+	end
+
+	def next_hand
+		@hole_cards = []
 	end
 
 ### Table state methods
+
+	def blackjack(cards)
+		jack = handify(cards) & [1,10,11,12,13]
+		if jack.count == 2 && jack.include?(1)
+			true
+		end
+	end
 
 	def winner
 		self.users.each do |user|
 			user.chips += user.seat.placed_bet * 2
 		end
+		puts "winner"
 	end
 
 	def showdown
 		self.users.each do |user|
-			if make_hand(user.seat.cards) < draw
+			if handify(user.seat.cards) < draw
 				user.chips += user.seat.placed_bet * 2
 				user.seat.update(placed_bet: 0)
 				## return win message(?)
-			elsif make_hand(user.seat.cards) == draw
+			elsif handify(user.seat.cards) == draw
 				user.chips += user.seat.placed_bet
 				user.seat.update(placed_bet: 0)
 				## return push message(?)
@@ -151,6 +158,7 @@ class Table < ActiveRecord::Base
 				## return loss message(?)
 			end
 		end
+		next_hand
 	end
 
 	def bust(hand)
