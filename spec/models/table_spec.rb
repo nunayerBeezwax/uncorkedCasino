@@ -188,6 +188,12 @@ describe Table do
 
 	describe "double_down" do
 		it "doubles a players bet, deals them one card, and moves action to next player" do
+			@table.bet(@user1, 5)
+			@table.bet(@user2, 5)
+			@table.deal
+			@table.double_down(@user1).should eq 2
+			@user1.seat.cards.count.should eq 3
+			@user1.seat.placed_bet.should eq 10
 		end
 	end
 end

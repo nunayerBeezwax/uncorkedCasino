@@ -73,9 +73,8 @@ class Table < ActiveRecord::Base
   end
 
 	def hit(user)
-		user.seat.cards << self.shoe.shift
-		hand = handify(user.seat.cards)
-		if bust(hand) 
+		user.seat.cards << @shoe.shift
+		if bust(handify(user.seat.cards)) 
 			user.seat.cards = []
 			self.game.house.bank += user.seat.placed_bet
 			user.seat.place_bet(0)
@@ -97,8 +96,8 @@ class Table < ActiveRecord::Base
 
   def double_down(user)
   	user.seat.placed_bet *= 2
-  	user.seat.table.hit(user)
-  	user.seat.table.stand(user)
+  	self.hit(user)
+  	self.stand(user)
   end
 
 	def draw
