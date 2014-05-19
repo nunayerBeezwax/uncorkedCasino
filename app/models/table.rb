@@ -4,6 +4,7 @@ class Table < ActiveRecord::Base
 	has_many :users, through: :seats
 	before_create :setup
 	has_many :cards
+	after_save :set_limits
 
 	attr_reader :house_cards, :limit, :shoe, :action, :action_on
 
@@ -22,10 +23,14 @@ class Table < ActiveRecord::Base
 
 ### Table setup 
 
-	def setup
-		@limit = [5, 10]
+
+	def set_limits
 		self.low = 5
 		self.high = 10
+	end
+	
+	def setup
+		@limit = [5, 10]	
 		@shoe = []
 		5.times do |i|
 			self.seats << Seat.create( number: i + 1  )
@@ -83,7 +88,7 @@ class Table < ActiveRecord::Base
 				fta << user.seat.number 
 			end
 		end
-		2.times { self.house_cards << @shoe.shift }
+		2.times { self.house_cards << self.shoe.shift }
 		if !blackjack(house_cards)
 			action(first_to_act)
 		else
@@ -102,7 +107,7 @@ class Table < ActiveRecord::Base
   end
 
 	def hit(user)
-		user.seat.cards << @shoe.shift
+		user.seat.cards << self.shoe.shift
 		if bust(handify(user.seat.cards)) 
 			user.seat.cards = []
 			self.game.house.bank += user.seat.placed_bet

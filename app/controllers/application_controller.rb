@@ -8,7 +8,7 @@ protect_from_forgery with: :null_session
 private
 
 def restrict_access
-	unless  ApiKey.exists?(access_token: params[:api_key])
+	unless  ApiKey.exists?(access_token: params[:token])
 	  authenticate_or_request_with_http_token do |token, options|
 	  	ApiKey.exists?(access_token: token)
 	  end
