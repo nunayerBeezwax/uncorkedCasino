@@ -146,6 +146,7 @@ describe Table do
 		it "prepares a table for blackjack - makes seats and shoe" do
 			@table.seats.count.should eq 5
 			@table.seats.last.number.should eq 5
+			@table.limit.should eq [5,10]
 		end
 	end
 

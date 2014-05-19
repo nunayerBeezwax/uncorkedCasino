@@ -49,6 +49,7 @@ end
 			response_body.should include @table1.to_json
 		end
 	end
+
 	get '/api/houses' do
 		example "leave current table" do
 			@user.sign_in

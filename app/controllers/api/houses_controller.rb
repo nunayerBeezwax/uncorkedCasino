@@ -2,6 +2,7 @@ module Api
 	class HousesController < ApplicationController
 		respond_to :json
 		before_filter :identify_user
+		
 		def index
 			if params[:games] == 'all'
 				render json: House.first.games
@@ -22,6 +23,8 @@ module Api
 			end
 		end
 
+
+private
 		def identify_user
 			ApiKey.find_by(access_token: params[:token]).user
 		end

@@ -3,6 +3,7 @@ class Table < ActiveRecord::Base
 	has_many :seats
 	has_many :users, through: :seats
 	before_create :setup
+	has_many :cards
 
 	attr_reader :house_cards, :limit, :shoe, :action, :action_on
 
@@ -22,8 +23,9 @@ class Table < ActiveRecord::Base
 ### Table setup 
 
 	def setup
-		@house_cards = []
 		@limit = [5, 10]
+		self.low = 5
+		self.high = 10
 		@shoe = []
 		5.times do |i|
 			self.seats << Seat.create( number: i + 1  )
@@ -48,11 +50,16 @@ class Table < ActiveRecord::Base
 	end
 
   def bet(user, amount)
-    if amount.between?(self.limit[0], self.limit[1])
+    if amount.between?(self.low, self.high)
       user.chips -= amount
 			user.seat.place_bet(amount)
 	    else 
     	## throw a "bet must be between..." error
+    end
+    if !self.seats.find_by_number(user.seat.number + 1).occupied?
+    	self.deal
+    else 
+    	## let next seat's user make a decision
     end
   end
 
@@ -62,7 +69,7 @@ class Table < ActiveRecord::Base
 				2.times { seat.cards << @shoe.shift }
 			end
 		end
-		2.times { self.house_cards << @shoe.shift }
+		2.times { self.cards << @shoe.shift }
 		## if !dealer_blackjack
 		action(first_to_act)
 	end
@@ -113,12 +120,12 @@ class Table < ActiveRecord::Base
 	end
 
 	def draw
-		hand = make_hand(@house_cards)
+		hand = make_hand(self.cards)
 		if bust(hand)
 			winner
 		else
 			if hand.inject(:+) <= 16 
-				@house_cards << @shoe.shift
+				self.cards << @shoe.shift
 				draw
 			else
 				hand.inject(:+)

@@ -33,19 +33,15 @@ end
 		end
 	end
 
-	# get '/api/users/:id' do
-	# 	example "Get the state of a user" do
-	# 		user = FactoryGirl.create(:user)
-	# 		do_request({:id => user.id})
-	# 		response_body.should == user.to_json		
-	# 	end
-	# end
-
 	get '/api/users/:id' do
 		example "Get the state of a user when they are in a game" do
 			@user1.sign_in
+			@table1.deal
 			do_request({:id => @user1.id})
-			response_body.should include @user.state.to_json
+			response_body.should include 'blackjack'
+			response_body.should include 'Hand'
+			response_body.should include 'House cards'
+			response_body.should include '1'
 		end
 	end
 
