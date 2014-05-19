@@ -59,7 +59,8 @@ class Table < ActiveRecord::Base
 		2.times { self.house_cards << @shoe.shift }
 		if !blackjack(house_cards)
 			action(first_to_act)
-		##  else go to house blackjack payouts
+		else
+			house_blackjack_payouts
 		end
 	end
 
@@ -100,6 +101,18 @@ class Table < ActiveRecord::Base
   	self.stand(user)
   end
 
+  def split(user)
+  	## totally unfinished... problematic
+  	if handify(user.seat.cards).uniq.count == 1
+  		temp_seat = Seat.new(user_id: user.id, table_id: self.id)
+  		temp_seat.cards << user.seat.cards.shift
+  		temp_seat.cards << @rack.shift
+  		## pass it to user decision
+  		user.seat.cards << @rack.shift
+  		## pass it to user decision
+  	end
+  end
+
 	def draw
 		hand = handify(@house_cards)
 		if bust(hand)
@@ -126,6 +139,7 @@ class Table < ActiveRecord::Base
 	end
 
 	def first_to_act
+		## can be refactored with a map
 		fta = []
 		self.users.each do |user| 
 			if user.seat.in_hand?
@@ -152,7 +166,7 @@ class Table < ActiveRecord::Base
 		end
 	end
 
-	def showdown
+	def standard_payout
 		self.users.each do |user|
 			if handify(user.seat.cards) < draw
 				user.chips += user.seat.placed_bet * 2
@@ -167,6 +181,18 @@ class Table < ActiveRecord::Base
 				self.game.house.bank += user.seat.placed_bet
 				user.seat.update(placed_bet: 0)
 				## return loss message(?)
+			end
+		end
+		next_hand
+	end
+
+	def house_blackjack_payouts
+		users.each do |user|
+			if blackjack(user.seat.cards)
+				user.chips += user.seat.placed_bet
+				user.seat.update(placed_bet: 0)
+			else
+				user.seat.update(placed_bet: 0)
 			end
 		end
 		next_hand

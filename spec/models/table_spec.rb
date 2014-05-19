@@ -17,8 +17,25 @@ describe Table do
 			@user5 = FactoryGirl.create(:user)
 			@user1.sit(@table)
 			@user2.sit(@table)
-
 		end
+
+	describe "house_blackjack_payouts" do
+		it "immediately ends hand, pushes with other blackjacks else player loses" do
+			@table.bet(@user1, 5)
+			@table.bet(@user2, 10)
+			@user1.seat.cards << Card.new(rank: 1)
+			@user1.seat.cards << Card.new(rank: 12)
+			@user2.seat.cards << Card.new(rank: 3)
+			@user2.seat.cards << Card.new(rank: 10)
+			@table.house_cards << Card.new(rank: 1)
+			@table.house_cards << Card.new(rank: 10)
+			@table.blackjack(@user1.seat.cards).should eq true
+			@table.blackjack(@table.house_cards).should eq true
+			@table.house_blackjack_payouts
+			# @user1.chips.should eq 500
+			# @user2.chips.should eq 490
+		end
+	end
 
 	describe "#blackjack" do
 		it "returns true if a hand is a blackjack" do

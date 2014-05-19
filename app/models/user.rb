@@ -41,7 +41,6 @@ class User < ActiveRecord::Base
   end
 
   def state
-    binding.pry
     {"table #" => self.seat.table.number,
      "Game name" => self.seat.table.game.name,
      "hand" => self.seat.cards,
