@@ -10,7 +10,7 @@ module Api
 				render json: @table
 			elsif params[:bet]
 				@table.bet(identify_user, params[:bet].to_i)
-				render json: [identify_user.seat.placed_bet, identify_user.seat.cards, identify_user.table.house_cards.first]
+				render json: [identify_user.seat.placed_bet, identify_user.seat.cards, identify_user.table.cards]
 			end
 			
 		end

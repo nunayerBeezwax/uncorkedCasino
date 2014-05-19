@@ -27,10 +27,10 @@ describe Table do
 			@user1.seat.cards << Card.new(rank: 12)
 			@user2.seat.cards << Card.new(rank: 3)
 			@user2.seat.cards << Card.new(rank: 10)
-			@table.house_cards << Card.new(rank: 1)
-			@table.house_cards << Card.new(rank: 10)
+			@table.cards << Card.new(rank: 1)
+			@table.cards << Card.new(rank: 10)
 			@table.blackjack(@user1.seat.cards).should eq true
-			@table.blackjack(@table.house_cards).should eq true
+			@table.blackjack(@table.cards).should eq true
 			@table.house_blackjack_payouts
 			# @user1.chips.should eq 500
 			# @user2.chips.should eq 490
@@ -47,8 +47,8 @@ describe Table do
 
 	describe "draw" do
 		it "makes a hand for the dealer, hitting until greater than 16 or bust" do
-			@table.house_cards << Card.new(rank: 8)
-			@table.house_cards << Card.new(rank: 12)
+			@table.cards << Card.new(rank: 8)
+			@table.cards << Card.new(rank: 12)
 			@table.draw.should eq 18
 		end
 		it "can draw cards if short" do
@@ -178,7 +178,7 @@ describe Table do
 			@table.seats.first.cards.count.should eq 2
 			@table.seats[1].cards.count.should eq 2
 			@table.seats[2].cards.count.should eq 0
-			@table.house_cards.count.should eq 2
+			@table.cards.count.should eq 2
 		end
 	end
 

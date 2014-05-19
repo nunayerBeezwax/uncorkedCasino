@@ -38,7 +38,7 @@ end
 			response_body.should include '10'
 			response_body.should include @user1.seat.placed_bet.to_s
 			response_body.should include "rank"
-			response_body.should include "house cards"
+			response_body.should include @user1.table.cards.to_json
 		end
 	end
 

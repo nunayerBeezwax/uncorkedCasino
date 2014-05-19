@@ -82,17 +82,18 @@ class Table < ActiveRecord::Base
 			if user.seat.in_hand?
 				fta << user.seat.number 
 			end
+		end
 		2.times { self.house_cards << @shoe.shift }
 		if !blackjack(house_cards)
 			action(first_to_act)
 		else
 			house_blackjack_payouts
->>>>>>> 7d752e32b4518875c7044e67f53d2e69bf8a32c5
 		end
+	
 	end
 
   def bet(user, amount)
-    if amount.between?(self.limit[0], self.limit[1])
+    if amount.between?(self.low, self.high)
       user.chips -= amount
 			user.seat.place_bet(amount)
 	  else 
@@ -141,7 +142,7 @@ class Table < ActiveRecord::Base
   end
 
 	def draw
-		hand = handify(@house_cards)
+		hand = handify(self.cards)
 		if bust(hand)
 			dealer_bust_payout
 		else
@@ -152,7 +153,7 @@ class Table < ActiveRecord::Base
 				hand.inject(:+)
 			end
 		end
-		handify(@house_cards).inject(:+)
+		handify(self.cards).inject(:+)
 	end
 
 ### Table state methods
