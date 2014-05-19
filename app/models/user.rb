@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
      "hand" => self.seat.cards,
      "House cards" => self.seat.table.house_cards,
      "limit" => self.seat.table.limit,
-     "action" => self.seat.table.action
+     "action" => self.seat.table.action([self.seat.number])
     } 
   end
 

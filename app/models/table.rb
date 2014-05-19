@@ -41,20 +41,14 @@ class Table < ActiveRecord::Base
 		self.shoe.shuffle!
 	end
 
-### Action methods
-
-	def action(seats_array)
-		seats_array.sort.first
+	def next_hand
+		@hole_cards = []
+		if @shoe.count < 30
+			fill_shoe
+		end
 	end
 
-  def bet(user, amount)
-    if amount.between?(self.limit[0], self.limit[1])
-      user.chips -= amount
-			user.seat.place_bet(amount)
-	    else 
-    	## throw a "bet must be between..." error
-    end
-  end
+### Action methods
 
 	def deal
 		self.seats.each do |seat|
@@ -63,24 +57,25 @@ class Table < ActiveRecord::Base
 			end
 		end
 		2.times { self.house_cards << @shoe.shift }
-		## if !dealer_blackjack
-		action(first_to_act)
+		if !blackjack(house_cards)
+			action(first_to_act)
+		else
+			house_blackjack_payouts
+		end
 	end
 
-	def first_to_act
-		fta = []
-		self.users.each do |user| 
-			if user.seat.in_hand?
-				fta << user.seat.number 
-			end
-		end
-		fta
-	end
+  def bet(user, amount)
+    if amount.between?(self.limit[0], self.limit[1])
+      user.chips -= amount
+			user.seat.place_bet(amount)
+	  else 
+    	## throw a "bet must be between..." error
+    end
+  end
 
 	def hit(user)
-		user.seat.cards << self.shoe.shift
-		hand = make_hand(user.seat.cards)
-		if bust(hand) 
+		user.seat.cards << @shoe.shift
+		if bust(handify(user.seat.cards)) 
 			user.seat.cards = []
 			self.game.house.bank += user.seat.placed_bet
 			user.seat.place_bet(0)
@@ -100,22 +95,28 @@ class Table < ActiveRecord::Base
   	action(next_to_act)
   end
 
-	def make_hand(cards)
-		hand = []
-		cards.each do |card|
-			if card.rank.between?(10, 13)
-				hand << 10
-			else
-				hand << card.rank
-			end
-		end
-		hand
-	end
+  def double_down(user)
+  	user.seat.placed_bet *= 2
+  	self.hit(user)
+  	self.stand(user)
+  end
+
+  def split(user)
+  	## totally unfinished... problematic
+  	if handify(user.seat.cards).uniq.count == 1
+  		temp_seat = Seat.new(user_id: user.id, table_id: self.id)
+  		temp_seat.cards << user.seat.cards.shift
+  		temp_seat.cards << @rack.shift
+  		## pass it to user decision
+  		user.seat.cards << @rack.shift
+  		## pass it to user decision
+  	end
+  end
 
 	def draw
-		hand = make_hand(@house_cards)
+		hand = handify(@house_cards)
 		if bust(hand)
-			winner
+			dealer_bust_payout
 		else
 			if hand.inject(:+) <= 16 
 				@house_cards << @shoe.shift
@@ -124,23 +125,54 @@ class Table < ActiveRecord::Base
 				hand.inject(:+)
 			end
 		end
+		handify(@house_cards).inject(:+)
 	end
 
 ### Table state methods
 
-	def winner
+	def handify(cards)
+		cards.map { |card| card.rank.between?(10,13) ? 10 : card.rank }.sort
+	end
+
+	def action(seats_array)
+		seats_array.sort.first
+	end
+
+	def first_to_act
+		## can be refactored with a map
+		fta = []
+		self.users.each do |user| 
+			if user.seat.in_hand?
+				fta << user.seat.number 
+			end
+		end
+		fta
+	end
+
+	def blackjack(cards)
+		jack = handify(cards) & [1,10,11,12,13]
+		if jack.count == 2 && jack.include?(1)
+			true
+		end
+	end
+
+	def bust(hand)
+		return true if hand.inject(:+) > 21
+	end
+
+	def dealer_bust_payout
 		self.users.each do |user|
 			user.chips += user.seat.placed_bet * 2
 		end
 	end
 
-	def showdown
+	def standard_payout
 		self.users.each do |user|
-			if make_hand(user.seat.cards) < draw
+			if handify(user.seat.cards) < draw
 				user.chips += user.seat.placed_bet * 2
 				user.seat.update(placed_bet: 0)
 				## return win message(?)
-			elsif make_hand(user.seat.cards) == draw
+			elsif handify(user.seat.cards) == draw
 				user.chips += user.seat.placed_bet
 				user.seat.update(placed_bet: 0)
 				## return push message(?)
@@ -151,10 +183,19 @@ class Table < ActiveRecord::Base
 				## return loss message(?)
 			end
 		end
+		next_hand
 	end
 
-	def bust(hand)
-		return true if hand.inject(:+) > 21
+	def house_blackjack_payouts
+		users.each do |user|
+			if blackjack(user.seat.cards)
+				user.chips += user.seat.placed_bet
+				user.seat.update(placed_bet: 0)
+			else
+				user.seat.update(placed_bet: 0)
+			end
+		end
+		next_hand
 	end
 
 	def player_count
