@@ -15,8 +15,35 @@ describe Table do
 			@user3 = FactoryGirl.create(:user)
 			@user4 = FactoryGirl.create(:user)
 			@user5 = FactoryGirl.create(:user)
-
+			@user1.sit(@table)
+			@user2.sit(@table)
 		end
+
+	describe "house_blackjack_payouts" do
+		it "immediately ends hand, pushes with other blackjacks else player loses" do
+			@table.bet(@user1, 5)
+			@table.bet(@user2, 10)
+			@user1.seat.cards << Card.new(rank: 1)
+			@user1.seat.cards << Card.new(rank: 12)
+			@user2.seat.cards << Card.new(rank: 3)
+			@user2.seat.cards << Card.new(rank: 10)
+			@table.house_cards << Card.new(rank: 1)
+			@table.house_cards << Card.new(rank: 10)
+			@table.blackjack(@user1.seat.cards).should eq true
+			@table.blackjack(@table.house_cards).should eq true
+			@table.house_blackjack_payouts
+			# @user1.chips.should eq 500
+			# @user2.chips.should eq 490
+		end
+	end
+
+	describe "#blackjack" do
+		it "returns true if a hand is a blackjack" do
+			@user1.seat.cards << Card.new(suit: "h", rank: 1)
+			@user1.seat.cards << Card.new(suit: "h", rank: 13)
+			@table.blackjack(@user1.seat.cards).should eq true
+		end
+	end	
 
 	describe "draw" do
 		it "makes a hand for the dealer, hitting until greater than 16 or bust" do
@@ -26,14 +53,12 @@ describe Table do
 		end
 		it "can draw cards if short" do
 			@table.deal
-			@table.draw.should > 16 || winner
+			@table.draw.should > 16 || []
 		end
 	end
 
 	describe "bet" do 
 		it "allows a player to place a bet, removes their chips, qualifies them to be in hand" do
-			@user1.sit(@table)
-			@user2.sit(@table)
 			@user3.sit(@table)
 			@table.bet(@user1, 5)
 			@user1.chips.should == 495
@@ -43,7 +68,6 @@ describe Table do
 
 	describe "first_to_act" do
 		it "starts at the first seat with a placed bet after deal" do
-			@user1.sit(@table)
 			@table.bet(@user1, 5)
 			@table.deal.should eq 1
 		end
@@ -51,8 +75,6 @@ describe Table do
 
 	describe "action_on" do
 		it "marks which seat's turn it is" do
-			@user1.sit(@table)
-			@user2.sit(@table)
 			@table.bet(@user1, 5)
 			@table.bet(@user2, 5)
 			@table.deal.should eq 1
@@ -62,8 +84,6 @@ describe Table do
 
 	describe "stand" do
 		it "allows players to stand, moves action to next player in hand" do
-			@user1.sit(@table)
-			@user2.sit(@table)
 			@user3.sit(@table)
 			@table.bet(@user1, 5)
 			@table.bet(@user2, 5)
@@ -76,7 +96,6 @@ describe Table do
 
 	describe "hit" do
 		it "gives another card when a user requests a hit, then checks for bust" do
-			@user1.sit(@table)
 			@table.bet(@user1, 5)
 		  @user1.seat.cards << Card.new(suit: 'h', rank: 13)
 		  @user1.seat.cards << Card.new(suit: 'h', rank: 9)
@@ -96,26 +115,22 @@ describe Table do
 
 	describe "vacancies" do
 		it "should return the vacant seats at a table" do
-			@user1.sit(@table)
-			@table.vacancies.count.should eq 4
-			@table.vacancies.first.number.should == 2
-			@table.vacancies.length.should == 4
-			@user2.sit(@table)
 			@table.vacancies.count.should eq 3
+			@table.vacancies.first.number.should == 3
+			@table.vacancies.length.should == 3
+			@user3.sit(@table)
+			@table.vacancies.count.should eq 2
 		end
 	end
 
 	describe "first_vacant" do
 		it "should return the first vacant seat" do
-			@user1.sit(@table)
-			@table.first_vacant.number.should == 2
+			@table.first_vacant.number.should == 3
 		end
 	end
 
 	describe "full_table?" do
 		it "is true if a table is full" do
-			@user1.sit(@table)
-			@user2.sit(@table)
 			@user3.sit(@table)
 			@user4.sit(@table)
 			@user5.sit(@table)
@@ -134,11 +149,10 @@ describe Table do
 
 	describe "player_count" do
 		it "should determine the number of players at a table" do
-			@user1.sit(@table)
-			@table.player_count.should == 1
-			@user2.sit(@table)
+			@table.player_count.should == 2
 			@user3.sit(@table)
-			@table.player_count.should == 3
+			@user4.sit(@table)
+			@table.player_count.should == 4
 		end
 	end
 
@@ -158,8 +172,6 @@ describe Table do
 
 	describe "#deal" do
 		it "gives 2 cards to each player who placed a bet" do
-			@user1.sit(@table)
-			@user2.sit(@table)
 			@table.seats.first.user.should eq @user1
 			@table.seats[1].user.should eq @user2
 			@table.deal
@@ -172,12 +184,34 @@ describe Table do
 
 	describe "#bust" do
 		it "checks a hand to see if it is over 21" do
-			@user1.sit(@table)
 			@user1.seat.cards << Card.new(suit: "h", rank: 9)
 			@user1.seat.cards << Card.new(suit: "h", rank: 10)
 			@user1.seat.cards << Card.new(suit: "h", rank: 13)
-			hand = @table.make_hand(@user1.seat.cards)
+			hand = @table.handify(@user1.seat.cards)
 			@table.bust(hand).should eq true
+		end
+	end
+
+	describe "#handify" do 
+		it "takes in cards and returns a sorted array of integers, 10 maximum" do 
+			@user1.seat.cards << Card.new(rank: 10)
+			@user1.seat.cards << Card.new(rank: 12)
+			@user1.seat.cards << Card.new(rank: 13)
+			@user1.seat.cards << Card.new(rank: 1)
+			@user1.seat.cards << Card.new(rank: 9)
+			@user1.seat.cards << Card.new(rank: 11)
+			@table.handify(@user1.seat.cards).should eq [1,9,10,10,10,10]
+		end
+	end
+
+	describe "double_down" do
+		it "doubles a players bet, deals them one card, and moves action to next player" do
+			@table.bet(@user1, 5)
+			@table.bet(@user2, 5)
+			@table.deal
+			@table.double_down(@user1).should eq 2
+			@user1.seat.cards.count.should eq 3
+			@user1.seat.placed_bet.should eq 10
 		end
 	end
 end

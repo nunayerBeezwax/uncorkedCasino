@@ -47,6 +47,7 @@ class User < ActiveRecord::Base
     !self.seat.cards.nil?  ? state["Hand"] = self.seat.cards.name : state["Hand"] = ''
     !self.seat.table.house_cards.nil?  ? state["House cards"] = self.seat.table.house_cards.name : state["House cards"] = ''
     state
+
   end
 
 
