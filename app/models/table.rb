@@ -1,12 +1,12 @@
 class Table < ActiveRecord::Base
 	belongs_to :game
 	has_many :seats
+	has_many :cards
+	has_one :shoe
 	has_many :users, through: :seats
 	before_create :setup
-	has_many :cards
-	after_save :set_limits
 
-	attr_reader :house_cards, :limit, :shoe, :action, :action_on
+	attr_reader :house_cards, :limit, :action, :action_on
 
 	def seat_qty
 		return 5 if self.game.name == "blackjack" 		
@@ -22,16 +22,11 @@ class Table < ActiveRecord::Base
 	
 
 ### Table setup 
-
-
-	def set_limits
-		self.low = 5
-		self.high = 10
-	end
 	
 	def setup
-		@limit = [5, 10]	
-		@shoe = []
+		self.shoe = Shoe.create
+		self.low = 5
+		self.high = 10
 		5.times do |i|
 			self.seats << Seat.create( number: i + 1  )
 		end
@@ -42,10 +37,9 @@ class Table < ActiveRecord::Base
 		decks.times do
 			deck = Deck.create
 			deck.cards.each do |card|
-				self.shoe << card
+				self.shoe.cards << card
 			end
 		end
-		self.shoe.shuffle!
 	end
 
 	def next_hand
@@ -73,10 +67,10 @@ class Table < ActiveRecord::Base
 	def deal
 		self.seats.each do |seat|
 			if seat.occupied?
-				2.times { seat.cards << @shoe.shift }
+				2.times { seat.cards << self.shoe.cards.shift }
 			end
 		end
-		2.times { self.cards << @shoe.shift }
+		2.times { self.cards << self.shoe.cards.shift }
 		## if !dealer_blackjack
 		action(first_to_act)
 	end
