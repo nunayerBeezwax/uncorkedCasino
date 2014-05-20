@@ -1,8 +1,10 @@
 class Api::SessionsController < Devise::RegistrationsController
+  protect_from_forgery with: :null_session
 
   before_filter :ensure_params_exist
   respond_to :json
   skip_before_filter :restrict_access
+  skip_before_filter :verify_authenticity_token
 
   def create
     build_resource

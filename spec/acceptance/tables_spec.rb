@@ -23,6 +23,9 @@ before(:each) do
 	@user.sign_in
 end
 
+
+
+
 	put 'api/tables/:id' do
 		example "Sit at a table" do
 			do_request({:id => @table1.id, :sit => 'any', :token => @user.api_key.access_token})
@@ -38,21 +41,28 @@ end
 			response_body.should include '10'
 			response_body.should include @user1.seat.placed_bet.to_s
 			response_body.should include "rank"
-			response_body.should include @user1.table.cards.to_json
+			response_body.should include 'dealer hand'
 		end
 	end
 
-
-
-
-
-
-
-
-
-
-
-
-
+		put 'api/tables/:id' do
+			example "Request a hit" do
+				@user1.sign_in
+				@table1.bet(@user1, 10)
+				@table1.deal
+				do_request({:id => @table1.id, :decision => "hit",:token => @user1.api_key.access_token})
+			end
+		end
 
 end
+
+
+
+
+
+
+
+
+
+
+

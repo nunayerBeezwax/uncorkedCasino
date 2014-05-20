@@ -160,13 +160,14 @@ describe Table do
 		it "prepares a table for blackjack - makes seats and shoe" do
 			@table.seats.count.should eq 5
 			@table.seats.last.number.should eq 5
-			@table.limit.should eq [5,10]
+			@table.low.should eq 5
+			@table.high.should eq 10
 		end
 	end
 
 	describe "#fill_shoe" do 
 		it "takes a number of decks (default 1) and puts the cards in that table's shoe" do
-			@table.shoe.count.should eq 52
+			@table.shoe.cards.count.should eq 52
 		end
 	end
 

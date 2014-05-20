@@ -45,7 +45,8 @@ class User < ActiveRecord::Base
     !self.seat.table.number.nil?  ? state["table #"] = self.seat.table.number : state["table #"] = ''
     !self.seat.table.game.name.nil?  ? state["Game name"] = self.seat.table.game.name : state["Game name"] = ''
     !self.seat.cards.nil?  ? state["Hand"] = self.seat.cards.name : state["Hand"] = ''
-    !self.seat.table.house_cards.nil?  ? state["House cards"] = self.seat.table.house_cards.name : state["House cards"] = ''
+    # !self.seat.placed_bet > 0  ? state["Bet"] = self.seat.placed_bet : state["Bet"] = 0
+    !self.seat.table.cards.nil?  ? state["House cards"] = self.seat.table.cards.name : state["House cards"] = ''
     state
 
   end
