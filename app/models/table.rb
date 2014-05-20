@@ -1,8 +1,9 @@
 class Table < ActiveRecord::Base
 	belongs_to :game
-	has_many :seats
+	
 	has_many :cards
 	has_one :shoe
+	has_many :seats
 	has_many :users, through: :seats
 	before_create :setup
 
@@ -65,12 +66,14 @@ class Table < ActiveRecord::Base
 
 
 	def deal
-		self.seats.each do |seat|
-			if seat.placed_bet > 0
-				2.times { seat.cards << self.random_card }
+		self.users.each do |user|
+			if user.seat.in_hand?
+				2.times do 
+					user.seat.cards << random_card 
+				end
 			end
 		end
-		2.times { self.cards << self.random_card }
+		2.times { self.cards << random_card }
 		## if !dealer_blackjack
 		action(first_to_act)
 	end
@@ -101,7 +104,7 @@ class Table < ActiveRecord::Base
   end
 
 	def hit(user)
-		user.seat.cards << self.random_card
+		user.seat.cards << random_card
 		if bust(handify(user.seat.cards)) 
 			user.seat.cards = []
 			self.game.house.bank += user.seat.placed_bet
@@ -157,7 +160,7 @@ class Table < ActiveRecord::Base
 
 	def random_card
 		cards = []
-		self.shoe.cards.each { |card| cards << card }
+		self.shoe.cards.each { |card| !card.played ? cards << card : '' }
 		cards.shuffle.shift.played!
 	end
 

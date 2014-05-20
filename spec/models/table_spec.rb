@@ -4,6 +4,7 @@ require 'spec_helper'
 
 describe Table do
 		it { should have_many :seats }
+		it { should have_many :users }
 
 		before(:each) do
 			@house = House.create
@@ -60,9 +61,9 @@ describe Table do
 	describe "bet" do 
 		it "allows a player to place a bet, removes their chips, qualifies them to be in hand" do
 			@user3.sit(@table)
-			@table.bet(@user1, 5)
-			@user1.chips.should == 495
-			@user1.seat.placed_bet.should eq 5
+			@user3.seat.place_bet(5)
+			@user3.chips.should == 495
+			@user3.seat.placed_bet.should eq 5
 		end
 	end
 
@@ -171,19 +172,48 @@ describe Table do
 		end
 	end
 
+	# describe "#deal" do
+	# 	it "gives 2 cards to each player who placed a bet" do
+	# 		@table.seats.first.user.should eq @user1
+	# 		@table.seats[1].user.should eq @user2
+	# 		@table.seats[0].place_bet(6)
+	# 		@table.seats[1].place_bet(7)
+	# 		@table.deal
+	# 		@table.seats.first.cards.count.should eq 2
+	# 		@table.seats[1].cards.count.should eq 2
+	# 		@table.seats[2].cards.count.should eq 0
+	# 		@table.cards.count.should eq 2
+	# 	end
+	# end
+
 	describe "#deal" do
 		it "gives 2 cards to each player who placed a bet" do
-			@table.seats.first.user.should eq @user1
-			@table.seats[1].user.should eq @user2
+			# @table.seats.first.place_bet(7)
+			# this works ^^^
+			# @table.seats.first.placed_bet.should == 7
+			#this doesn't ^^^^
+			@user1.seat.place_bet(7)
+			@user1.seat.placed_bet.should == 7
 			@table.deal
-			@table.seats.first.cards.count.should eq 2
-			@table.seats[1].cards.count.should eq 2
-			@table.seats[2].cards.count.should eq 0
-			@table.cards.count.should eq 2
+		  @user1.cards.count.should == 2
+		 	@table.cards.count.should == 2
 		end
 	end
 
-	describe "#bust" do
+	describe "double_down" do
+		it "doubles a players bet, deals them one card, and moves action to next player" do
+			@user1.seat.place_bet(5)
+			@user2.seat.place_bet(5)
+			@table.deal			
+			@table.double_down(@user1)
+			@user1.seat.placed_bet.should eq 10
+			@user1.cards.count.should == 3 || 0
+			
+		end
+	end
+
+
+		describe "#bust" do
 		it "checks a hand to see if it is over 21" do
 			@user1.seat.cards << Card.new(suit: "h", rank: 9)
 			@user1.seat.cards << Card.new(suit: "h", rank: 10)
@@ -202,17 +232,6 @@ describe Table do
 			@user1.seat.cards << Card.new(rank: 9)
 			@user1.seat.cards << Card.new(rank: 11)
 			@table.handify(@user1.seat.cards).should eq [1,9,10,10,10,10]
-		end
-	end
-
-	describe "double_down" do
-		it "doubles a players bet, deals them one card, and moves action to next player" do
-			@table.bet(@user1, 5)
-			@table.bet(@user2, 5)
-			@table.deal
-			@table.double_down(@user1).should eq 2
-			@user1.seat.cards.count.should eq 3
-			@user1.seat.placed_bet.should eq 10
 		end
 	end
 end

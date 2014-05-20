@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
   has_one :api_key
   has_one :seat
   has_one :table, through: :seat
+  has_many :cards, through: :seat
 
   def sit(table, seatnumber=nil)
     if seatnumber == nil

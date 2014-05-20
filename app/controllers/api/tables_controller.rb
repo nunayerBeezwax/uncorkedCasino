@@ -5,9 +5,9 @@ module Api
 
 		def update
 			@table = Table.find(params[:id])
-			if params[:sit]
+			if params[:sit] == 'any'
 				identify_user.sit(@table)
-				render json: @table
+				render json: identify_user.state
 			elsif params[:bet]
 				@table.bet(identify_user, params[:bet].to_i)
 				render json: [{"bet" =>identify_user.seat.placed_bet, "hand" => identify_user.seat.cards, "dealer hand" => @table.cards.first}]
@@ -17,6 +17,7 @@ module Api
 					render json: identify_user.state
 				elsif params[:decision] == "stand"
 					@table.stand(identify_user)
+					render json: identify_user.state
 				end
 			end
 		end

@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'tables' do
-
 before(:each) do
   ApplicationController.any_instance.stub(:restrict_access => true)
  	@house = House.create()
@@ -23,48 +22,46 @@ before(:each) do
 	@user.sign_in
 end
 
-
-
-
-	put 'api/tables/:id' do
-		example "Sit at a table" do
-			do_request({:id => @table1.id, :sit => 'any', :token => @user.api_key.access_token})
-			response_body.should include @table1.to_json
-		end
+put 'api/tables/:id' do
+	example "Sit at a table" do
+		do_request({:id => @table1.id, :sit => 'any', :token => @user.api_key.access_token})
+		response_body.should include 'table #":1'
 	end
+end
+
+put 'api/tables/:id' do
+	example "Place an initial bet" do
+		@user1.sign_in
+		@table1.deal
+		do_request({:id => @table1.id, :bet => '10', :token => @user1.api_key.access_token})
+		response_body.should include '10'
+		response_body.should include @user1.seat.placed_bet.to_s
+		response_body.should include "rank"
+		response_body.should include 'dealer hand'
+	end
+end
 
 	put 'api/tables/:id' do
-		example "Place an initial bet" do
+		example "Request a hit" do
 			@user1.sign_in
-			@table1.deal
-			do_request({:id => @table1.id, :bet => '10', :token => @user1.api_key.access_token})
-			response_body.should include '10'
-			response_body.should include @user1.seat.placed_bet.to_s
-			response_body.should include "rank"
-			response_body.should include 'dealer hand'
+			@table1.bet(@user1, 10)
+			@user1.seat.cards << Card.create(rank: 5, suit: "h")
+			@user1.seat.cards << Card.create(rank: 3, suit: "h")
+			do_request({:id => @table1.id, :decision => "hit",:token => @user1.api_key.access_token})
+			JSON.parse(response_body)["Hand"].count.should eq 3
 		end
 	end
 
-		put 'api/tables/:id' do
-			example "Request a hit" do
-				@user1.sign_in
-				@table1.bet(@user1, 10)
-				@user1.seat.cards << Card.create(rank: 5, suit: "h")
-				@user1.seat.cards << Card.create(rank: 3, suit: "h")
-				do_request({:id => @table1.id, :decision => "hit",:token => @user1.api_key.access_token})
-				JSON.parse(response_body)["Hand"].count.should eq 3
-			end
+	put 'api/tables/:id' do
+		example 'Player stands with hand' do
+			@user1.sign_in
+			@user1.seat.place_bet(10)
+			@table1.deal
+			@user1.cards.count.should == 2
+			do_request({:id => @table1.id, :decision => "stand",:token => @user1.api_key.access_token})
+			JSON.parse(response_body)["Hand"].count.should eq 2
 		end
-
-		put 'api/tables/:id' do
-			example 'Player stands with hand' do
-				@user1.sign_in
-				@table1.bet(@user1, 10)
-				@table1.deal
-				do_request({:id => @table1.id, :decision => "stand",:token => @user1.api_key.access_token})
-			end
-		end
-
+	end
 end
 
 

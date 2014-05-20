@@ -22,11 +22,19 @@ describe Seat do
 		end
 	end
 
+	describe "place_bet" do
+		it "updates the placed bet of the seat" do
+			@user1.sit(@table)
+			@user1.seat.place_bet(10)
+			@user1.seat.placed_bet.should eq 10
+		end
+	end
+
 	describe "in_hand?" do
 		it "returns true if a player is currently in the hand" do
 			@user1.sit(@table)
 			@user2.sit(@table)
-			@table.bet(@user1, 5)
+			@user1.seat.place_bet(7)
 			@user1.seat.in_hand?.should eq true
 			@user2.seat.in_hand?.should eq false
 

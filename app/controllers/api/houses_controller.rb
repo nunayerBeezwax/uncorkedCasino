@@ -16,7 +16,7 @@ module Api
 				render json: report.to_json.to_s.gsub!(/\"/, '\'')
 			elsif params[:playgame] == "blackjack"
 				identify_user.first_open(params[:playgame])
-				render json: identify_user.seat.table.to_json
+				render json: identify_user.state
 			elsif params[:leavegame] == 'all'
 				identify_user.leave_table
 				render json: identify_user.to_json

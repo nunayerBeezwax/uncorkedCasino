@@ -8,7 +8,10 @@ class Seat < ActiveRecord::Base
 	end
 
 	def place_bet(amount)
-		self.update(placed_bet: amount)
+	   if amount.between?(self.table.low, self.table.high)
+    	self.user.chips -= amount
+			self.update(placed_bet: amount)
+		end
 	end
 
 	def in_hand?

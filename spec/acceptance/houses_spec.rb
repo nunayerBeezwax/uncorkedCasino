@@ -46,7 +46,7 @@ end
 			@user.sign_in
 			do_request({:playgame => 'blackjack', token: @user.api_key.access_token})
 			# need a current_user helper method
-			response_body.should include @table1.to_json
+			response_body.should include 'blackjack'
 		end
 	end
 

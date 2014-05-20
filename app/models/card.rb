@@ -5,7 +5,7 @@ class Card < ActiveRecord::Base
 
 	def played!
 		self.played = true
-		return self
+		self
 	end
 	
 end
