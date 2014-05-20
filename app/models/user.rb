@@ -49,6 +49,20 @@ class User < ActiveRecord::Base
     state
   end
 
+  def end_state
+    table = self.seat.table
+    state = {}
+    state["table #"] = table.number if !table.number.nil? 
+    state["Game name"] = table.game.name if !table.game.name.nil?
+    state["Hand"] = self.seat.cards if !self.seat.cards.nil?
+    state["Bet"] = self.seat.placed_bet if !self.seat.placed_bet == 0
+    state["House cards"] = table.cards if !table.cards.nil?
+    state["User Hand Value"] = table.handify(self.seat.cards) if !self.seat.cards.nil?
+    state["House Hand Value"] = table.handify(table.cards) if !table.cards.nil?
+    state["Result"] = table.winner(self.seat.cards, table.cards)
+    state
+  end
+
   def set_gravatar_url
     hash = Digest::MD5.hexdigest(self.email.downcase.strip)
     update_attributes(gravatar_url: "http://gravatar.com/avatar/#{hash}") 

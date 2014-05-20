@@ -3,6 +3,11 @@ module Api
 		respond_to :json
 		before_filter :identify_user
 
+		def show
+			@table = Table.find(params[:id])
+			render json: identify_user.end_state
+		end
+
 		def update
 			@table = Table.find(params[:id])
 			if params[:sit] == 'any'

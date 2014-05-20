@@ -103,6 +103,7 @@ class Table < ActiveRecord::Base
 		self.shoe.cards.each { |card| cards << card if !card.played }
 		cards.shuffle.shift.played!
 	end
+
 ### Payout types ###
 
 	def dealer_bust_payout
@@ -112,6 +113,17 @@ class Table < ActiveRecord::Base
 		next_hand
 	end
 
+	def winner(user_cards, house_cards)
+		result = handify(user_cards).inject(:+) - handify(house_cards).inject(:+)
+		if result == 0
+			"Push"
+		elsif result > 0
+			"Win"
+		elsif result < 0
+			"Loss"
+		end
+	end
+			
 	def standard_payout
 		self.users.each do |user|
 			if handify(user.seat.cards) < draw
