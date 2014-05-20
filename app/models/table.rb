@@ -66,7 +66,7 @@ class Table < ActiveRecord::Base
 
 	def deal
 		self.seats.each do |seat|
-			if seat.occupied?
+			if seat.placed_bet > 0
 				2.times { seat.cards << self.random_card }
 			end
 		end
