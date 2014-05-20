@@ -13,4 +13,3 @@ class Deck < ActiveRecord::Base
 		end
 	end
 end
-

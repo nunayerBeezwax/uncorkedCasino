@@ -1,6 +1,4 @@
 class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
   attr_accessor :login
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
@@ -49,9 +47,7 @@ class User < ActiveRecord::Base
     # !self.seat.placed_bet > 0  ? state["Bet"] = self.seat.placed_bet : state["Bet"] = 0
     !self.seat.table.cards.nil?  ? state["House cards"] = self.seat.table.cards : state["House cards"] = ''
     state
-
   end
-
 
   def set_gravatar_url
     hash = Digest::MD5.hexdigest(self.email.downcase.strip)

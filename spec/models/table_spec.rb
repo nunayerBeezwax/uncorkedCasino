@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-## When run individually the tests pass, they fail when run together
-
 describe Table do
 		it { should have_many :seats }
 		it { should have_many :users }
@@ -22,8 +20,8 @@ describe Table do
 
 	describe "house_blackjack_payouts" do
 		it "immediately ends hand, pushes with other blackjacks else player loses" do
-			@table.bet(@user1, 5)
-			@table.bet(@user2, 10)
+			@user1.seat.place_bet(5)
+			@user2.seat.place_bet(5)
 			@user1.seat.cards << Card.new(rank: 1)
 			@user1.seat.cards << Card.new(rank: 12)
 			@user2.seat.cards << Card.new(rank: 3)
@@ -69,35 +67,40 @@ describe Table do
 
 	describe "first_to_act" do
 		it "starts at the first seat with a placed bet after deal" do
-			@table.bet(@user1, 5)
-			@table.deal.should eq 1
+			@user1.seat.place_bet(5)
+			@user2.seat.place_bet(5)
+			@table.first_to_act.should eq 1
 		end
 	end
 
 	describe "action_on" do
 		it "marks which seat's turn it is" do
-			@table.bet(@user1, 5)
-			@table.bet(@user2, 5)
-			@table.deal.should eq 1
-			@table.stand(@user1).should eq 2
+			@user1.seat.place_bet(5)
+			@user2.seat.place_bet(5)
+			@table.action.should eq 1
+			@table.stand(@user1)
+			@table.action.should eq 2
 		end
 	end
 
 	describe "stand" do
 		it "allows players to stand, moves action to next player in hand" do
 			@user3.sit(@table)
-			@table.bet(@user1, 5)
-			@table.bet(@user2, 5)
-			@table.bet(@user3, 5)
-			@table.deal.should eq 1
-			@table.stand(@user1).should eq 2
-			@table.stand(@user2).should eq 3
+			@user1.seat.place_bet(5)
+			@user2.seat.place_bet(5)
+			@user3.seat.place_bet(5)
+			@table.deal
+			@table.action.should eq 1
+			@table.stand(@user1)
+			@table.action.should eq 2
+			@table.stand(@user3)
+			@table.action.should eq 3
 		end
 	end
 
 	describe "hit" do
 		it "gives another card when a user requests a hit, then checks for bust" do
-			@table.bet(@user1, 5)
+			@user1.seat.place_bet(5)
 		  @user1.seat.cards << Card.new(suit: 'h', rank: 13)
 		  @user1.seat.cards << Card.new(suit: 'h', rank: 9)
 		  @user1.seat.cards << Card.new(suit: 'h', rank: 8)
@@ -139,15 +142,6 @@ describe Table do
 		end
 	end
 
-	describe "populate_seats" do
-		it "should add the number of seats to the table based on its game" do
-			@table.game.name.should == 'blackjack'
-			@table.seats.length.should == 5
-			@table.seats.sort.last.number.should == 5
-			@table.seats.first.number.should == 1
-		end
-	end
-
 	describe "player_count" do
 		it "should determine the number of players at a table" do
 			@table.player_count.should == 2
@@ -168,23 +162,9 @@ describe Table do
 
 	describe "#fill_shoe" do 
 		it "takes a number of decks (default 1) and puts the cards in that table's shoe" do
-			@table.shoe.cards.count.should eq 52
+			@table.shoe.cards.count.should eq 156
 		end
 	end
-
-	# describe "#deal" do
-	# 	it "gives 2 cards to each player who placed a bet" do
-	# 		@table.seats.first.user.should eq @user1
-	# 		@table.seats[1].user.should eq @user2
-	# 		@table.seats[0].place_bet(6)
-	# 		@table.seats[1].place_bet(7)
-	# 		@table.deal
-	# 		@table.seats.first.cards.count.should eq 2
-	# 		@table.seats[1].cards.count.should eq 2
-	# 		@table.seats[2].cards.count.should eq 0
-	# 		@table.cards.count.should eq 2
-	# 	end
-	# end
 
 	describe "#deal" do
 		it "gives 2 cards to each player who placed a bet" do
@@ -203,15 +183,13 @@ describe Table do
 	describe "double_down" do
 		it "doubles a players bet, deals them one card, and moves action to next player" do
 			@user1.seat.place_bet(5)
-			@user2.seat.place_bet(5)
-			@table.deal			
+			@user1.seat.cards << Card.new(rank: 5)
+			@user1.seat.cards << Card.new(rank: 5)
 			@table.double_down(@user1)
 			@user1.seat.placed_bet.should eq 10
 			@user1.cards.count.should == 3 || 0
-			
 		end
 	end
-
 
 		describe "#bust" do
 		it "checks a hand to see if it is over 21" do

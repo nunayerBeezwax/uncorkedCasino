@@ -7,5 +7,4 @@ class Card < ActiveRecord::Base
 		self.played = true
 		self
 	end
-	
 end

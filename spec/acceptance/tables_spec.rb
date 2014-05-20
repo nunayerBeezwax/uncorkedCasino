@@ -44,7 +44,7 @@ end
 	put 'api/tables/:id' do
 		example "Request a hit" do
 			@user1.sign_in
-			@table1.bet(@user1, 10)
+			@user1.seat.place_bet(10)
 			@user1.seat.cards << Card.create(rank: 5, suit: "h")
 			@user1.seat.cards << Card.create(rank: 3, suit: "h")
 			do_request({:id => @table1.id, :decision => "hit",:token => @user1.api_key.access_token})

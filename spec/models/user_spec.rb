@@ -10,7 +10,6 @@ before(:each) do
 	@game = FactoryGirl.create(:game)
 	@table = FactoryGirl.create(:table)
 	@table.update(game_id: @game.id)
-	@table.populate_seats
 	@user1 = FactoryGirl.create(:user)
 	@user2 = FactoryGirl.create(:user)
 	@user3 = FactoryGirl.create(:user)
