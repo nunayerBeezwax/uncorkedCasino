@@ -43,8 +43,8 @@ class Table < ActiveRecord::Base
 	end
 
 	def next_hand
-		@hole_cards = []
-		if @shoe.count < 30
+		self.cards = []
+		if self.shoe.cards.where(played: false).count < 30
 			fill_shoe
 		end
 	end
@@ -67,10 +67,10 @@ class Table < ActiveRecord::Base
 	def deal
 		self.seats.each do |seat|
 			if seat.occupied?
-				2.times { seat.cards << self.shoe.cards.shift }
+				2.times { seat.cards << self.random_card }
 			end
 		end
-		2.times { self.cards << self.shoe.cards.shift }
+		2.times { self.cards << self.random_card }
 		## if !dealer_blackjack
 		action(first_to_act)
 	end
@@ -82,7 +82,7 @@ class Table < ActiveRecord::Base
 				fta << user.seat.number 
 			end
 		end
-		2.times { self.house_cards << self.shoe.shift }
+		2.times { self.house_cards << self.random_card }
 		if !blackjack(house_cards)
 			action(first_to_act)
 		else
@@ -101,7 +101,7 @@ class Table < ActiveRecord::Base
   end
 
 	def hit(user)
-		user.seat.cards << self.shoe.shift
+		user.seat.cards << self.random_card
 		if bust(handify(user.seat.cards)) 
 			user.seat.cards = []
 			self.game.house.bank += user.seat.placed_bet
@@ -146,13 +146,19 @@ class Table < ActiveRecord::Base
 			dealer_bust_payout
 		else
 			if hand.inject(:+) <= 16 
-				self.cards << @shoe.shift
+				self.cards << self.random_card
 				draw
 			else
 				hand.inject(:+)
 			end
 		end
 		handify(self.cards).inject(:+)
+	end
+
+	def random_card
+		cards = []
+		self.shoe.cards.each { |card| cards << card }
+		cards.shuffle.shift.played!
 	end
 
 ### Table state methods
