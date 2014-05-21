@@ -18,14 +18,15 @@ before(:each) do
 	@user1.sit(@table1)
 	@user2.sit(@table1)
 	@user3.sit(@table1)
-	@user4.sit(@table2)
+	@user4.sit(@table1)
 	@user.sign_in
+	@user.sit(@table2)
 end
 
 put 'api/tables/:id' do
 	example "Sit at a table" do
 		do_request({:id => @table1.id, :sit => 'any', :token => @user.api_key.access_token})
-		response_body.should include 'table #":1'
+		response_body.should include 'table #":2'
 	end
 end
 
@@ -44,7 +45,7 @@ end
 	put 'api/tables/:id' do
 		example "Request a hit" do
 			@user1.sign_in
-			@table1.bet(@user1, 10)
+			@user1.seat.place_bet(10)
 			@user1.seat.cards << Card.create(rank: 5, suit: "h")
 			@user1.seat.cards << Card.create(rank: 3, suit: "h")
 			do_request({:id => @table1.id, :decision => "hit",:token => @user1.api_key.access_token})
@@ -60,6 +61,17 @@ end
 			@user1.cards.count.should == 2
 			do_request({:id => @table1.id, :decision => "stand",:token => @user1.api_key.access_token})
 			JSON.parse(response_body)["Hand"].count.should eq 2
+		end
+	end
+
+	get 'api/tables/:id' do
+		example 'Get result' do
+			## break this test to see results
+			@user.seat.place_bet(10)
+			@table2.deal
+			@table2.stand(@user)
+			do_request({:id => @table2.id, :token => @user.api_key.access_token})
+			response_body.should include "Result"
 		end
 	end
 end

@@ -18,4 +18,3 @@ class Seat < ActiveRecord::Base
 		self.placed_bet > 0
 	end
 end
-

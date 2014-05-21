@@ -16,7 +16,6 @@ before(:each) do
   @table2 = Table.create(number: 2)
   @house.games.first.tables << @table1
   @house.games.first.tables << @table2
-  @table1.populate_seats
 	@user1.sit(@table1)
 	@user2.sit(@table1)
 	@user3.sit(@table1)

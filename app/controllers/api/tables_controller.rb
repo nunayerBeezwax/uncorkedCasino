@@ -3,13 +3,18 @@ module Api
 		respond_to :json
 		before_filter :identify_user
 
+		def show
+			@table = Table.find(params[:id])
+			render json: identify_user.end_state
+		end
+
 		def update
 			@table = Table.find(params[:id])
 			if params[:sit] == 'any'
 				identify_user.sit(@table)
 				render json: identify_user.state
 			elsif params[:bet]
-				@table.bet(identify_user, params[:bet].to_i)
+				identify_user.seat.place_bet(params[:bet].to_i)
 				render json: [{"bet" =>identify_user.seat.placed_bet, "hand" => identify_user.seat.cards, "dealer hand" => @table.cards.first}]
 			elsif params[:decision]
 				if params[:decision] == "hit"
