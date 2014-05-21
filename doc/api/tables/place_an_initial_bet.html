@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Sessions API</title>
+    <title>tables API</title>
     <meta charset="utf-8">
     <style>
       td.required .name:after {
@@ -29,11 +29,11 @@
   </head>
   <body>
     <div class="container">
-      <h1>Sessions API</h1>
+      <h1>tables API</h1>
 
       <div class="article">
-        <h2>Signing in a New User</h2>
-        <h3>POST /api/users/sign_in</h3>
+        <h2>Place an initial bet</h2>
+        <h3>PUT api/tables/:id</h3>
 
 
           <h3>Request</h3>
@@ -44,14 +44,14 @@ Content-Type: application/x-www-form-urlencoded
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">POST /api/users/sign_in</pre>
+          <pre class="request route highlight">PUT api/tables/11</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">user[password]=123455678&user[username]=Dr.+Tate+Wisozk</pre>
+            <pre class="request body">bet=10&token=8fd44f37ff0ce09344c5f224603334e9</pre>
 
             <h4>cURL</h4>
-            <pre class="request curl">curl &quot;http://localhost:3000/api/users/sign_in&quot; -d 'user[password]=123455678&amp;user[username]=Dr.+Tate+Wisozk' -X POST \
+            <pre class="request curl">curl &quot;http://localhost:3000api/tables/11&quot; -d 'bet=10&amp;token=8fd44f37ff0ce09344c5f224603334e9' -X PUT \
 	-H &quot;Host: example.org&quot; \
 	-H &quot;Content-Type: application/x-www-form-urlencoded&quot; \
 	-H &quot;Cookie: &quot;</pre>
@@ -62,17 +62,16 @@ Cookie: </pre>
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 Content-Type: application/json; charset=utf-8
-ETag: &quot;996e2a92e89035e7d08e5d610b3dc586&quot;
+ETag: &quot;c8de6fb62660443735a515c1c94696d0&quot;
 Cache-Control: max-age=0, private, must-revalidate
-Set-Cookie: request_method=POST; path=/
-_gaming_api_session=ZWNGc29YK1p0RkhuRmZHbXpZbnlFaWpGK3BRYzBnbFNPc0w5SS9RamxSYzNCODFSSk1LcWRGWmNFbzJvbGc1L2NpQWU0MVhLZDR4bjRmcFg4eUtkYTMwTm8wRWpFZzdzbWppMWNVbDhUa05wZHgxMnB2c2lTSHBqbVBOU3RseGRIZGs1a1ZlTkk1YXJYQm5TYmx5UFVBPT0tLU1hd3hpWG42MHBNREM0aEFWWkJFOGc9PQ%3D%3D--aa5b405e34d7f59433efb022bfff2a0588d66ccf; path=/; HttpOnly
-X-Request-Id: 1b8da370-16fe-4377-ad0e-f121df8b382a
-X-Runtime: 0.200794
-Content-Length: 219</pre>
+Set-Cookie: request_method=PUT; path=/
+X-Request-Id: f616bae5-8361-41b6-9f02-cf713905d608
+X-Runtime: 0.025934
+Content-Length: 217</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{"success":true,"auth_token":{"id":2,"access_token":"185ddea0181f889b4df2a6d144628eac","created_at":"2014-05-21T17:29:42.538Z","updated_at":"2014-05-21T17:29:42.538Z","user_id":1},"email":"stefanie_dietrich@wolff.info"}</pre>
+              <pre class="response body">[{"bet":10,"hand":[],"dealer hand":{"id":1621,"deck_id":32,"created_at":"2014-05-21T17:29:54.557Z","updated_at":"2014-05-21T17:29:56.469Z","seat_id":null,"suit":"C","rank":7,"shoe_id":11,"table_id":11,"played":true}}]</pre>
       </div>
     </div>
   </body>

@@ -44,12 +44,17 @@ Content-Type: application/x-www-form-urlencoded
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">PATCH /api/users/4</pre>
+          <pre class="request route highlight">PATCH /api/users/64</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">user[username]=Dandlezzz</pre>
+            <pre class="request body">user[username]=jenny</pre>
 
+            <h4>cURL</h4>
+            <pre class="request curl">curl &quot;http://localhost:3000/api/users/64&quot; -d 'user[username]=jenny' -X PATCH \
+	-H &quot;Host: example.org&quot; \
+	-H &quot;Content-Type: application/x-www-form-urlencoded&quot; \
+	-H &quot;Cookie: &quot;</pre>
 
             <h3>Response</h3>
             <h4>Headers</h4>
@@ -57,16 +62,16 @@ Cookie: </pre>
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 Content-Type: application/json; charset=utf-8
-ETag: &quot;d09a2edc8d5e70b8c72554c872d5f51d&quot;
+ETag: &quot;72831ea7820a13957c9b1b00b9b4db3c&quot;
 Cache-Control: max-age=0, private, must-revalidate
 Set-Cookie: request_method=PATCH; path=/
-X-Request-Id: ddf38f34-dc3e-4ef1-96be-835fa2830e5d
-X-Runtime: 0.012062
-Content-Length: 268</pre>
+X-Request-Id: 48ac5a89-53f9-404d-a58c-2685449e91f1
+X-Runtime: 0.016273
+Content-Length: 248</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{"id":4,"email":"mariano.reichert@hackett.name","created_at":"2014-05-15T22:22:31.868Z","updated_at":"2014-05-15T22:22:31.879Z","chips":500,"username":"Dandlezzz","gravatar_url":"http://gravatar.com/avatar/aa8a43d9d1ec1fa6d4b9df666309c77e","authentication_token":null}</pre>
+              <pre class="response body">{"id":64,"email":"larue@bayerluettgen.info","created_at":"2014-05-21T17:30:09.940Z","updated_at":"2014-05-21T17:30:09.956Z","chips":500,"house_id":null,"username":"jenny","gravatar_url":"http://gravatar.com/avatar/1e198fefdfb1ddf7fa119b671dee78ff"}</pre>
       </div>
     </div>
   </body>

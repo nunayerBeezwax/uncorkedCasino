@@ -32,7 +32,7 @@
       <h1>houses API</h1>
 
       <div class="article">
-        <h2>Get a list of all the games being played</h2>
+        <h2>Play a game</h2>
         <h3>GET /api/houses</h3>
 
 
@@ -43,15 +43,15 @@
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/houses?games=all&amp;token=cdf6566a41c66168ff8284d81a474ab1</pre>
+          <pre class="request route highlight">GET /api/houses?playgame=blackjack&amp;token=f8ec9a5e81ca9ee4b4654d50da8ca5d3</pre>
 
             <h4>Query Parameters</h4>
-            <pre class="request query_parameters highlight">games: all
-token: cdf6566a41c66168ff8284d81a474ab1</pre>
+            <pre class="request query_parameters highlight">playgame: blackjack
+token: f8ec9a5e81ca9ee4b4654d50da8ca5d3</pre>
 
 
             <h4>cURL</h4>
-            <pre class="request curl">curl &quot;http://localhost:3000/api/houses?games=all&amp;token=cdf6566a41c66168ff8284d81a474ab1&quot; -X GET \
+            <pre class="request curl">curl &quot;http://localhost:3000/api/houses?playgame=blackjack&amp;token=f8ec9a5e81ca9ee4b4654d50da8ca5d3&quot; -X GET \
 	-H &quot;Host: example.org&quot; \
 	-H &quot;Cookie: &quot;</pre>
 
@@ -61,16 +61,16 @@ token: cdf6566a41c66168ff8284d81a474ab1</pre>
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 Content-Type: application/json; charset=utf-8
-ETag: &quot;6f3ae2485dc0bda8e6e0e1611872d8a2&quot;
+ETag: &quot;3c200ccaf7532f071e426e0c241871f6&quot;
 Cache-Control: max-age=0, private, must-revalidate
 Set-Cookie: request_method=GET; path=/
-X-Request-Id: 6fa39937-041d-45ac-89ed-97ce5516dcaf
-X-Runtime: 0.009574
-Content-Length: 122</pre>
+X-Request-Id: 957a4f9c-0cfa-4ee8-8db7-9ab02a4165dd
+X-Runtime: 0.066844
+Content-Length: 72</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[{"id":2,"name":"blackjack","created_at":"2014-05-21T17:29:45.126Z","updated_at":"2014-05-21T17:29:45.128Z","house_id":2}]</pre>
+              <pre class="response body">{"table #":1,"Game name":"blackjack","Hand":[],"Bet":0,"House cards":[]}</pre>
       </div>
     </div>
   </body>

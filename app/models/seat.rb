@@ -12,6 +12,8 @@ class Seat < ActiveRecord::Base
     	self.user.chips -= amount
 			self.update(placed_bet: amount)
 		end
+		## if all the players have had a chance to place bets
+		self.table.deal
 	end
 
 	def in_hand?
