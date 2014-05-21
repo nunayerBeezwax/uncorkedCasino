@@ -23,6 +23,9 @@ module Api
 				elsif params[:decision] == "stand"
 					@table.stand(identify_user)
 					render json: identify_user.state
+				elsif params[:decision] == "double"
+					@table.double_down(identify_user)
+					render json: identify_user.state
 				end
 			end
 		end

@@ -50,11 +50,11 @@ class User < ActiveRecord::Base
     state["Table #"] ||= table.number
     state["Game name"] ||= table.game.name
     !self.seat.cards.nil?  ? state["Hand"] = self.seat.cards : state["Hand"] = ''
-    !self.seat.placed_bet == 0  ? state["Bet"] = self.seat.placed_bet : state["Bet"] = 0
+    !state["Bet"] = self.seat.placed_bet
     !table.cards.nil?  ? state["House cards"] = table.cards : state["House cards"] = ''
     !table.action.nil? ? state["Action on"] = table.action : state["Action on"] = 0
     state["Table limit"] = [table.low, table.high] if !table.low.nil? && !table.high.nil?
-    state["User Current Chips"] = self.chips if !self.chips.nil?
+    state["User Current Chips"] = self.chips
     state["User Hand Value"] = table.handify(self.seat.cards) if !self.seat.cards.nil?
     state["House Hand Value"] = table.handify(table.cards) if !table.cards.nil?
     # state["Result"] = table.winner(self.seat.cards, table.cards) if table.cards.count > 0

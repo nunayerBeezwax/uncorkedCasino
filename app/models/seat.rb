@@ -9,7 +9,7 @@ class Seat < ActiveRecord::Base
 
 	def place_bet(amount)
 	   if amount.between?(self.table.low, self.table.high)
-    	self.user.chips -= amount
+    	self.user.decrement!(:chips, amount)
 			self.update(placed_bet: amount)
 		end
 		## if all the players have had a chance to place bets
