@@ -103,10 +103,8 @@ describe Table do
 	describe "hit" do
 		it "gives another card when a user requests a hit, then checks for bust" do
 			@user1.seat.place_bet(5)
-		  @user1.seat.cards << Card.new(suit: 'h', rank: 13)
-		  @user1.seat.cards << Card.new(suit: 'h', rank: 9)
-		  @user1.seat.cards << Card.new(suit: 'h', rank: 8)
-			@table.hit(@user1)
+		  @user1.seat.cards << Card.create(rank: 20)
+		  @user1.table.hit(@user1)
 			@user1.seat.cards.count.should eq 0
 			@table.game.house.bank.should == 1000005
 		end
@@ -176,7 +174,6 @@ describe Table do
 			#this doesn't ^^^^
 			@user1.seat.place_bet(7)
 			@user1.seat.placed_bet.should == 7
-			@table.deal
 		  @user1.cards.count.should == 2
 		 	@table.cards.count.should == 2
 		end
@@ -185,11 +182,9 @@ describe Table do
 	describe "double_down" do
 		it "doubles a players bet, deals them one card, and moves action to next player" do
 			@user1.seat.place_bet(5)
-			@user1.seat.cards << Card.new(rank: 5)
-			@user1.seat.cards << Card.new(rank: 5)
 			@table.double_down(@user1)
-			@user1.seat.placed_bet.should eq 10
-			@user1.cards.count.should == 3 || 0
+			[10, 0].should include @user1.seat.placed_bet
+			[3,0].should include @user1.seat.cards.count
 		end
 	end
 

@@ -26,7 +26,7 @@ end
 put 'api/tables/:id' do
 	example "Sit at a table" do
 		do_request({:id => @table1.id, :sit => 'any', :token => @user.api_key.access_token})
-		response_body.should include 'table #":2'
+		response_body.should include '2'
 	end
 end
 
@@ -38,7 +38,7 @@ put 'api/tables/:id' do
 		response_body.should include '10'
 		response_body.should include @user1.seat.placed_bet.to_s
 		response_body.should include "rank"
-		response_body.should include 'dealer hand'
+		response_body.should include @user1.seat.table.cards.to_json.to_s
 	end
 end
 
@@ -46,8 +46,7 @@ end
 		example "Request a hit" do
 			@user1.sign_in
 			@user1.seat.place_bet(10)
-			@user1.seat.cards << Card.create(rank: 5, suit: "h")
-			@user1.seat.cards << Card.create(rank: 3, suit: "h")
+			#need to stub out to prevent busts
 			do_request({:id => @table1.id, :decision => "hit",:token => @user1.api_key.access_token})
 			JSON.parse(response_body)["Hand"].count.should eq 3
 		end
@@ -57,21 +56,9 @@ end
 		example 'Player stands with hand' do
 			@user1.sign_in
 			@user1.seat.place_bet(10)
-			@table1.deal
 			@user1.cards.count.should == 2
 			do_request({:id => @table1.id, :decision => "stand",:token => @user1.api_key.access_token})
 			JSON.parse(response_body)["Hand"].count.should eq 2
-		end
-	end
-
-	get 'api/tables/:id' do
-		example 'Get result' do
-			## break this test to see results
-			@user.seat.place_bet(10)
-			@table2.deal
-			@table2.stand(@user)
-			do_request({:id => @table2.id, :token => @user.api_key.access_token})
-			response_body.should include "Result"
 		end
 	end
 end

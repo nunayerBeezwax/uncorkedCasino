@@ -32,6 +32,7 @@ class Table < ActiveRecord::Base
 	### Table behaviors ###
 
 	def deal
+
 		self.users.each do |user|
 			if user.seat.in_hand?
 				2.times do 
@@ -44,10 +45,12 @@ class Table < ActiveRecord::Base
 
 	def hit(user)
 		user.seat.cards << random_card
-		if bust(handify(user.seat.cards)) 
+		if bust(self.handify(user.seat.cards))
 			user.seat.cards = []
-			self.game.house.bank += user.seat.placed_bet
-			user.seat.place_bet(0)
+			bank = self.game.house.bank 
+			bank += user.seat.placed_bet
+			self.game.house.update(bank: bank) 
+			user.seat.update(placed_bet: 0)
 			stand(user)		
 		else
 			## Throw it back to the user to decide again
