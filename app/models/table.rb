@@ -59,6 +59,9 @@ class Table < ActiveRecord::Base
 
   def stand(user)
   	self.increment!(:action, 1)
+  	if self.dealers_turn?
+  		self.draw
+  	end
   end
 
   def double_down(user)
@@ -66,6 +69,12 @@ class Table < ActiveRecord::Base
   	user.seat.increment!(:placed_bet, user.seat.placed_bet)
   	self.hit(user)
   	self.stand(user)
+  end
+
+  def dealers_turn?
+  	active_players = 0
+  	self.users.each {|user| active_players += 1 if user.seat.in_hand? }
+  	active_players < self.action
   end
 
   # def split(user)
@@ -92,7 +101,7 @@ class Table < ActiveRecord::Base
 				hand.inject(:+)
 			end
 		end
-		handify(self.cards).inject(:+)
+		self.standard_payout(handify(self.cards).inject(:+))
 	end
 
 	def next_hand
@@ -129,17 +138,19 @@ class Table < ActiveRecord::Base
 		end
 	end
 			
-	def standard_payout
+	def standard_payout(dealer_total)
 		self.users.each do |user|
-			if handify(user.seat.cards) < draw
-				user.chips += user.seat.placed_bet * 2
-				user.seat.update(placed_bet: 0)
-			elsif handify(user.seat.cards) == draw
-				user.chips += user.seat.placed_bet
-				user.seat.update(placed_bet: 0)
-			else
-				self.game.house.bank += user.seat.placed_bet
-				user.seat.update(placed_bet: 0)
+			if user.seat.cards != []	
+				if handify(user.seat.cards).inject(:+) < dealer_total
+					user.chips += user.seat.placed_bet * 2
+					user.seat.update(placed_bet: 0)
+				elsif handify(user.seat.cards).inject(:+) == dealer_total
+					user.chips += user.seat.placed_bet
+					user.seat.update(placed_bet: 0)
+				else
+					self.game.house.bank += user.seat.placed_bet
+					user.seat.update(placed_bet: 0)
+				end
 			end
 		end
 		next_hand
@@ -157,12 +168,6 @@ class Table < ActiveRecord::Base
 		next_hand
 	end
 
-### Table state ###
-
-	def first_to_act
-		self.users.map{|user| user.seat.number if user.seat.in_hand?}.first
-	end
-
 	def handify(cards)
 		cards.map { |card| card.rank.between?(10,13) ? 10 : card.rank }.sort
 	end
@@ -176,6 +181,10 @@ class Table < ActiveRecord::Base
 
 	def bust(hand)
 		return true if hand.inject(:+) > 21
+	end
+### Table state ###
+	def first_to_act
+		self.users.map{|user| user.seat.number if user.seat.in_hand?}.first
 	end
 
 	def player_count

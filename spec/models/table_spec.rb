@@ -36,6 +36,32 @@ describe Table do
 		end
 	end
 
+	describe "a whole game" do 
+		it "should pay out the user when the dealer busts" do
+			@user1.table.seat.place_bet(7)
+			@user1.table.stand(@user1)
+			@user1.table.cards.count.should > 2
+
+		end
+	end
+
+	describe "dealers_turn?" do
+		it "should return true when all the players are done" do
+			@user1.seat.place_bet(7)
+			@user2.seat.place_bet(7)
+			@user1.table.stand(@user1)
+			@user2.table.stand(@user2)
+			@user2.table.dealers_turn?.should == true
+		end
+		it "should return false when all the players are not done" do
+			@user1.seat.place_bet(7)
+			@user2.seat.place_bet(7)
+			@user1.table.stand(@user1)
+			@table.dealers_turn?.should == false
+		end
+	end
+
+
 	describe "#blackjack" do
 		it "returns true if a hand is a blackjack" do
 			@user1.seat.cards << Card.new(suit: "h", rank: 1)
@@ -44,19 +70,7 @@ describe Table do
 		end
 	end	
 
-	describe "draw" do
-		it "makes a hand for the dealer, hitting until greater than 16 or bust" do
-			@table.cards << Card.new(rank: 8)
-			@table.cards << Card.new(rank: 12)
-			@table.draw.should eq 18
-		end
-		it "can draw cards if short" do
-			@table.deal
-			if @table.draw
-				@table.draw.should > 16
-			end
-		end
-	end
+
 
 	describe "bet" do 
 		it "allows a player to place a bet, removes their chips, qualifies them to be in hand" do
@@ -81,7 +95,7 @@ describe Table do
 			@user2.seat.place_bet(5)
 			@table.action.should eq 1
 			@table.stand(@user1)
-			@table.action.should eq 2
+			@user1.table.action.should eq 2
 		end
 	end
 
@@ -91,7 +105,6 @@ describe Table do
 			@user1.seat.place_bet(5)
 			@user2.seat.place_bet(5)
 			@user3.seat.place_bet(5)
-			@table.deal
 			@table.action.should eq 1
 			@table.stand(@user1)
 			@table.action.should eq 2
