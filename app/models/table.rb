@@ -10,6 +10,7 @@ class Table < ActiveRecord::Base
 ### Table setup ###
 	
 	def setup
+		self.number = Table.count + 1
 		self.shoe = Shoe.create
 		self.low = 5
 		self.high = 10
@@ -129,15 +130,12 @@ class Table < ActiveRecord::Base
 			if handify(user.seat.cards) < draw
 				user.chips += user.seat.placed_bet * 2
 				user.seat.update(placed_bet: 0)
-				## return win message(?)
 			elsif handify(user.seat.cards) == draw
 				user.chips += user.seat.placed_bet
 				user.seat.update(placed_bet: 0)
-				## return push message(?)
 			else
 				self.game.house.bank += user.seat.placed_bet
 				user.seat.update(placed_bet: 0)
-				## return loss message(?)
 			end
 		end
 		next_hand

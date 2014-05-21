@@ -15,7 +15,7 @@ module Api
 				render json: identify_user.state
 			elsif params[:bet]
 				identify_user.seat.place_bet(params[:bet].to_i)
-				render json: [{"bet" =>identify_user.seat.placed_bet, "hand" => identify_user.seat.cards, "dealer hand" => @table.cards.first}]
+				render json: identify_user.state
 			elsif params[:decision]
 				if params[:decision] == "hit"
 					@table.hit(identify_user)

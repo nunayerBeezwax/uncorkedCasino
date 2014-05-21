@@ -44,10 +44,15 @@ Content-Type: application/x-www-form-urlencoded
 Cookie: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">DELETE /api/users/5</pre>
+          <pre class="request route highlight">DELETE /api/users/52</pre>
 
 
 
+            <h4>cURL</h4>
+            <pre class="request curl">curl &quot;http://localhost:3000/api/users/52&quot; -d '' -X DELETE \
+	-H &quot;Host: example.org&quot; \
+	-H &quot;Content-Type: application/x-www-form-urlencoded&quot; \
+	-H &quot;Cookie: &quot;</pre>
 
             <h3>Response</h3>
             <h4>Headers</h4>
@@ -56,8 +61,8 @@ X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 Cache-Control: no-cache
 Set-Cookie: request_method=DELETE; path=/
-X-Request-Id: 438ab49e-674f-4fe7-b2de-643b00bfc5a4
-X-Runtime: 0.010885</pre>
+X-Request-Id: 49a57c3c-bd32-4ecf-9841-e446a8556580
+X-Runtime: 0.084787</pre>
             <h4>Status</h4>
             <pre class="response status">204 No Content</pre>
       </div>

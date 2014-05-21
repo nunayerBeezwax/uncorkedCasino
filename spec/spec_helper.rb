@@ -61,5 +61,7 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 end
-
+RspecApiDocumentation.configure do |config|
+  config.curl_host = 'http://localhost:3000/'
+end
 end

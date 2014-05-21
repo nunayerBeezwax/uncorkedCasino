@@ -48,8 +48,13 @@ Cookie: </pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">user[email]=noemie%40watershudson.net&user[password]=123455678&user[username]=Keeley+Schoen&user[password_confirmation]=123455678</pre>
+            <pre class="request body">user[email]=ayana%40kiehn.biz&user[password]=123455678&user[username]=Mr.+Sandrine+Hahn&user[password_confirmation]=123455678</pre>
 
+            <h4>cURL</h4>
+            <pre class="request curl">curl &quot;http://localhost:3000/api/users/&quot; -d 'user[email]=ayana%40kiehn.biz&amp;user[password]=123455678&amp;user[username]=Mr.+Sandrine+Hahn&amp;user[password_confirmation]=123455678' -X POST \
+	-H &quot;Host: example.org&quot; \
+	-H &quot;Content-Type: application/x-www-form-urlencoded&quot; \
+	-H &quot;Cookie: &quot;</pre>
 
             <h3>Response</h3>
             <h4>Headers</h4>
@@ -57,16 +62,16 @@ Cookie: </pre>
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
 Content-Type: application/json; charset=utf-8
-ETag: &quot;6233173287b8a72a4aa1a40ee604d19d&quot;
+ETag: &quot;ffa91598a954b0b226cb232a50c26786&quot;
 Cache-Control: max-age=0, private, must-revalidate
 Set-Cookie: request_method=POST; path=/
-X-Request-Id: fb6399f8-65e4-44c4-9de1-15c8a662282d
-X-Runtime: 0.014969
-Content-Length: 266</pre>
+X-Request-Id: eb057d70-7e09-4cfa-8ffe-2727673f20fc
+X-Runtime: 0.034854
+Content-Length: 252</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{"id":2,"email":"noemie@watershudson.net","created_at":"2014-05-15T22:22:31.835Z","updated_at":"2014-05-15T22:22:31.838Z","chips":500,"username":"Keeley Schoen","gravatar_url":"http://gravatar.com/avatar/d4e616a04b793049ff7c4f0f3907a507","authentication_token":null}</pre>
+              <pre class="response body">{"id":58,"email":"ayana@kiehn.biz","created_at":"2014-05-21T17:30:08.091Z","updated_at":"2014-05-21T17:30:08.096Z","chips":null,"house_id":null,"username":"Mr. Sandrine Hahn","gravatar_url":"http://gravatar.com/avatar/6614a348ab0be8eb619a0b979472fd08"}</pre>
       </div>
     </div>
   </body>
