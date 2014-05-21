@@ -66,11 +66,12 @@ end
 
 	get 'api/tables/:id' do
 		example 'Get result' do
+			## break this test to see results
 			@user.seat.place_bet(10)
 			@table2.deal
 			@table2.stand(@user)
 			do_request({:id => @table2.id, :token => @user.api_key.access_token})
-			response_body.should include "asd;lkfjasd;lfkj"
+			response_body.should include "Result"
 		end
 	end
 end

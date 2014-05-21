@@ -52,7 +52,9 @@ describe Table do
 		end
 		it "can draw cards if short" do
 			@table.deal
-			@table.draw.should > 16 || []
+			if @table.draw
+				@table.draw.should > 16
+			end
 		end
 	end
 
