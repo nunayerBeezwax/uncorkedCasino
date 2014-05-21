@@ -32,7 +32,7 @@ class Table < ActiveRecord::Base
 	### Table behaviors ###
 
 	def deal
-
+		self.cards = []
 		self.users.each do |user|
 			if user.seat.in_hand?
 				2.times do 
@@ -58,11 +58,12 @@ class Table < ActiveRecord::Base
 	end
 
   def stand(user)
-  	self.action += 1
+  	self.increment!(:action, 1)
   end
 
   def double_down(user)
-  	user.seat.placed_bet *= 2
+  	user.decrement!(:chips, user.seat.placed_bet)
+  	user.seat.increment!(:placed_bet, user.seat.placed_bet)
   	self.hit(user)
   	self.stand(user)
   end
