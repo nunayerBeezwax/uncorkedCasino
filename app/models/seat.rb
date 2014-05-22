@@ -12,8 +12,6 @@ class Seat < ActiveRecord::Base
     	self.user.decrement!(:chips, amount)
 			self.update(placed_bet: amount)
 		end
-		## right now deal works if everyone at the table
-		## is forced to bet.  no siting without playing.
 		if self.number >= self.table.users.count
 			self.table.deal
 		end

@@ -271,7 +271,7 @@ describe Table do
 			@user3.seat.update(placed_bet: 7)
 			@user1.decrement!(:chips, @user1.seat.placed_bet)
 			@user2.decrement!(:chips, @user2.seat.placed_bet)
-			@user3.decrement!(:chips, @user2.seat.placed_bet)
+			@user3.decrement!(:chips, @user3.seat.placed_bet)
 			@user1.seat.cards << Card.new(rank: 8)
 			@user1.seat.cards << Card.new(rank: 12)
 			@user2.seat.cards << Card.new(rank: 3)
@@ -281,13 +281,11 @@ describe Table do
 			@table.cards << Card.new(rank: 7)
 			@table.cards << Card.new(rank: 10)
 			@table.standard_payout(@table.handify(@table.cards).inject(:+))
-			##still can't refer to objects in right way, but should be working
-
-			# @table.seats.first.user.chips.should eq 505
-			# @table.seats.first.placed_bet.should eq 0
-			# @table.seats[1].user.chips.should eq 494
-			# @table.seats[2].user.chips.should eq 507
-			# @table.game.house.bank.should eq 999994
+			@table.users[0].chips.should eq 505
+			@table.users.first.seat.placed_bet.should eq 0
+			@table.users[1].chips.should eq 494
+			@table.users[2].chips.should eq 507
+			@table.game.house.bank.should eq 999994
 		end
 	end
 end

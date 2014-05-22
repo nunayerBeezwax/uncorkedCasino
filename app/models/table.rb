@@ -103,9 +103,7 @@ class Table < ActiveRecord::Base
 	end
 
 	def next_hand
-		## this not working in curl-- hands don't empty
-		self.seats.each { |s| s.update(cards: []) }
-		## rest of this stuff does
+		self.users.each { |u| u.seat.update(cards: []) }
 		self.cards = []
 		self.action = 1
 		if self.shoe.cards.where(played: false).count < 30
@@ -210,6 +208,7 @@ class Table < ActiveRecord::Base
 
 	def win(user)
 		self.game.house.decrement!(:bank, user.seat.placed_bet)
+		binding.pry
 		user.increment!(:chips, (user.seat.placed_bet * 2))
 		user.seat.update(placed_bet: 0)
 	end
