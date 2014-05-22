@@ -46,7 +46,8 @@ end
 		example "Request a hit" do
 			@user1.sign_in
 			@user1.seat.place_bet(10)
-			#need to stub out to prevent busts
+			@user1.seat.cards << Card.new(rank: 4)
+			@user1.seat.cards << Card.new(rank: 4)
 			do_request({:id => @table1.id, :decision => "hit",:token => @user1.api_key.access_token})
 			JSON.parse(response_body)["Hand"].count.should eq 3
 		end
@@ -54,10 +55,9 @@ end
 
 	put 'api/tables/:id' do
 		example 'Player stands with hand' do
-			@user1.sign_in
-			@user1.seat.place_bet(10)
-			@user1.cards.count.should == 2
-			do_request({:id => @table1.id, :decision => "stand",:token => @user1.api_key.access_token})
+			@user.seat.place_bet(10)
+			@user.cards.count.should == 2
+			do_request({:id => @table2.id, :decision => "stand",:token => @user.api_key.access_token})
 			JSON.parse(response_body)["Hand"].count.should eq 2
 		end
 	end
