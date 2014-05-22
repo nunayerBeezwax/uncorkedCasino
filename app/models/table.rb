@@ -103,7 +103,9 @@ class Table < ActiveRecord::Base
 	end
 
 	def next_hand
-		self.users.each { |u| u.seat.cards = [] }
+		## this not working in curl-- hands don't empty
+		self.seats.each { |s| s.update(cards: []) }
+		## rest of this stuff does
 		self.cards = []
 		self.action = 1
 		if self.shoe.cards.where(played: false).count < 30

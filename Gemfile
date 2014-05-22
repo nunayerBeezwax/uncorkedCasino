@@ -11,7 +11,7 @@ gem 'devise'
 gem 'rspec_api_documentation'
 gem 'httparty'
 gem 'whenever'
-
+gem 'rack-cors', :require => 'rack/cors'
 gem 'rails_12factor', group: :production
 
 
