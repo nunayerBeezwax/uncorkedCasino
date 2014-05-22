@@ -2,8 +2,15 @@ class ApplicationController < ActionController::Base
 	
 before_filter :restrict_access
 before_filter :configure_permitted_parameters, if: :devise_controller?
+before_filter :cors_set_access_control_headers
 protect_from_forgery with: :null_session
  
+def cors_set_access_control_headers 
+	headers['Access-Control-Allow-Origin'] = '*'
+	headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
+	headers['Access-Control-Request-Method'] = '*'
+	headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization, OPTIONS'
+end
 
 private
 

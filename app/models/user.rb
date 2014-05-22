@@ -57,8 +57,6 @@ class User < ActiveRecord::Base
     state["User Current Chips"] = self.chips
     state["User Hand Value"] = table.handify(self.seat.cards) if !self.seat.cards.nil?
     state["House Hand Value"] = table.handify(table.cards) if !table.cards.nil?
-    # state["Result"] = table.winner(self.seat.cards, table.cards) if table.cards.count > 0
-    ## win check on a condition
     state
   end
 
