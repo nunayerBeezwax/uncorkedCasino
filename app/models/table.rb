@@ -40,7 +40,7 @@ class Table < ActiveRecord::Base
 
 	def hit(user)
 		user.seat.cards << random_card
-		if bust(self.handify(user.seat.cards))
+		if bust(self.count(handify(user.seat.cards)))
 			user.seat.cards = []
 			user.seat.update(placed_bet: 0)
 			stand(user)		
@@ -84,16 +84,16 @@ class Table < ActiveRecord::Base
 	end
 
 	def draw
-		hand = self.handify(self.cards)
+		hand = self.count(handify(self.cards))
 		if self.bust(hand)
 			self.dealer_bust_payout
 		else
-			if hand.inject(:+) <= 16 
+			if hand <= 16 
 				self.cards << random_card
 				draw
 			end
 		end
-		self.standard_payout(hand.inject(:+))
+		self.standard_payout(hand)
 	end
 
 	def random_card
@@ -115,13 +115,25 @@ class Table < ActiveRecord::Base
 		cards.map { |card| card.rank.between?(10,13) ? 10 : card.rank }.sort
 	end
 
+	def count(array)
+		if array.include?(1)
+			if array.inject(:+) + 10 < 21
+				array.inject(:+) + 10
+			else
+				array.inject(:+)
+			end
+		else
+			array.inject(:+)
+		end
+	end
+
 	def blackjack(cards)
 		jack = handify(cards) & [1,10,11,12,13]
 		jack.count == 2 && jack.include?(1)
 	end
 
-	def bust(hand)
-		hand.inject(:+) > 21
+	def bust(number)
+		number > 21
 	end
 
 ### Table state ###
@@ -208,7 +220,6 @@ class Table < ActiveRecord::Base
 
 	def win(user)
 		self.game.house.decrement!(:bank, user.seat.placed_bet)
-		binding.pry
 		user.increment!(:chips, (user.seat.placed_bet * 2))
 		user.seat.update(placed_bet: 0)
 	end

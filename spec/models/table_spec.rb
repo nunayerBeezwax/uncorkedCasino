@@ -98,7 +98,7 @@ describe Table do
 			@table.draw
 			if @table.cards.count > 0
 				@table.cards.count.should > 2
-				@table.handify(@table.cards).inject(:+).should > 16
+				@table.count(@table.handify(@table.cards)).should > 16
 			end
 		end
 	end
@@ -139,6 +139,18 @@ describe Table do
 		end
 	end
 
+	describe "#count" do
+		it "adds up the handified rank arrays, treating aces properly" do
+			@table.cards << Card.new(rank: 1)
+			@table.cards << Card.new(rank: 7)
+			@user1.seat.cards << Card.new(rank: 1)
+			@user1.seat.cards << Card.new(rank: 1)
+			@user1.seat.cards << Card.new(rank: 10)
+			@table.count(@table.handify(@table.cards)).should eq 18
+			@table.count(@table.handify(@user1.seat.cards)).should eq 12
+		end
+	end
+
 	describe "#blackjack" do
 		it "returns boolean result of blackjack if given hand" do
 			@user1.seat.cards << Card.new(suit: "h", rank: 1)
@@ -155,12 +167,12 @@ describe Table do
 			@user1.seat.cards << Card.new(suit: "h", rank: 9)
 			@user1.seat.cards << Card.new(suit: "h", rank: 10)
 			@user1.seat.cards << Card.new(suit: "h", rank: 13)
-			hand = @table.handify(@user1.seat.cards)
+			hand = @table.count(@table.handify(@user1.seat.cards))
 			@table.bust(hand).should eq true			
 			@user2.seat.cards << Card.new(suit: "h", rank: 9)
 			@user2.seat.cards << Card.new(suit: "h", rank: 1)
 			@user2.seat.cards << Card.new(suit: "h", rank: 7)
-			hand = @table.handify(@user2.seat.cards)
+			hand = @table.count(@table.handify(@user2.seat.cards))
 			@table.bust(hand).should eq false
 		end
 	end
