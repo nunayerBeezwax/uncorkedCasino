@@ -4,10 +4,7 @@ class Table < ActiveRecord::Base
 	has_many :cards
 	has_many :seats
 	has_many :users, through: :seats
-
 	before_create :setup
-
-### Table setup ###
 	
 	def setup
 		self.number = Table.count + 1
@@ -23,13 +20,9 @@ class Table < ActiveRecord::Base
 	def fill_shoe(decks=1)
 		decks.times do
 			deck = Deck.create
-			deck.cards.each do |card|
-				self.shoe.cards << card
-			end
+			deck.cards.each { |card| 	self.shoe.cards << card }
 		end
 	end
-
-### User actions ###
 
   def stand(user)
   	self.increment!(:action, 1)
@@ -55,26 +48,14 @@ class Table < ActiveRecord::Base
   end
 
   # def split(user)
-  # 	## totally unfinished... problematic
-  # 	if handify(user.seat.cards).uniq.count == 1
-  # 		temp_seat = Seat.new(user_id: user.id, table_id: self.id)
-  # 		temp_seat.cards << user.seat.cards.shift
-  # 		temp_seat.cards << @rack.shift
-  # 		## pass it to user decision
-  # 		user.seat.cards << @rack.shift
-  # 		## pass it to user decision
-  # 	end
+ 	# to do
   # end
-
-	### Table behaviors ###
 
 	def deal
 		self.cards = []
 		self.users.each do |user|
 			if user.seat.in_hand?
-				2.times do 
-					user.seat.cards << random_card 
-				end
+				2.times { user.seat.cards << random_card }
 			end
 		end
 		2.times { self.cards << random_card }
@@ -136,8 +117,6 @@ class Table < ActiveRecord::Base
 		number > 21
 	end
 
-### Table state ###
-
   def dealers_turn?
   	active_players = 0
   	self.users.each {|user| active_players += 1 if user.seat.in_hand? }
@@ -181,9 +160,7 @@ class Table < ActiveRecord::Base
 ### Payouts ###
 
 	def dealer_bust_payout
-		self.users.each do |user|
-			win(user)
-		end
+		self.users.each { |user| win(user) }
 	end
 			
 	def standard_payout(dealer_total)

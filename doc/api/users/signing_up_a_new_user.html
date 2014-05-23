@@ -41,37 +41,43 @@
           <h4>Headers</h4>
           <pre class="request headers">Host: example.org
 Content-Type: application/x-www-form-urlencoded
-Cookie: </pre>
+Cookie: 
+Origin: </pre>
 
           <h4>Route</h4>
           <pre class="request route highlight">POST /api/users/</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">user[email]=ayana%40kiehn.biz&user[password]=123455678&user[username]=Mr.+Sandrine+Hahn&user[password_confirmation]=123455678</pre>
+            <pre class="request body">user[email]=jaclyn_kris%40schillergislason.net&user[password]=123455678&user[username]=Lenny+Wiegand+III&user[password_confirmation]=123455678</pre>
 
             <h4>cURL</h4>
-            <pre class="request curl">curl &quot;http://localhost:3000/api/users/&quot; -d 'user[email]=ayana%40kiehn.biz&amp;user[password]=123455678&amp;user[username]=Mr.+Sandrine+Hahn&amp;user[password_confirmation]=123455678' -X POST \
+            <pre class="request curl">curl &quot;http://localhost:3000//api/users/&quot; -d &#39;user[email]=jaclyn_kris%40schillergislason.net&amp;user[password]=123455678&amp;user[username]=Lenny+Wiegand+III&amp;user[password_confirmation]=123455678&#39; -X POST \
 	-H &quot;Host: example.org&quot; \
 	-H &quot;Content-Type: application/x-www-form-urlencoded&quot; \
-	-H &quot;Cookie: &quot;</pre>
+	-H &quot;Cookie: &quot; \
+	-H &quot;Origin: &quot;</pre>
 
             <h3>Response</h3>
             <h4>Headers</h4>
             <pre class="response headers">X-Frame-Options: SAMEORIGIN
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: POST, PUT, DELETE, GET, OPTIONS
+Access-Control-Request-Method: *
+Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, OPTIONS
 Content-Type: application/json; charset=utf-8
-ETag: &quot;ffa91598a954b0b226cb232a50c26786&quot;
+ETag: &quot;2d64bf4956a28a92fc2d8861849f5f61&quot;
 Cache-Control: max-age=0, private, must-revalidate
 Set-Cookie: request_method=POST; path=/
-X-Request-Id: eb057d70-7e09-4cfa-8ffe-2727673f20fc
-X-Runtime: 0.034854
-Content-Length: 252</pre>
+X-Request-Id: 9e886dd4-1f4c-45ee-9cd1-5ae4e467571b
+X-Runtime: 0.012178
+Content-Length: 280</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{"id":58,"email":"ayana@kiehn.biz","created_at":"2014-05-21T17:30:08.091Z","updated_at":"2014-05-21T17:30:08.096Z","chips":null,"house_id":null,"username":"Mr. Sandrine Hahn","gravatar_url":"http://gravatar.com/avatar/6614a348ab0be8eb619a0b979472fd08"}</pre>
+              <pre class="response body">{"id":27,"email":"jaclyn_kris@schillergislason.net","created_at":"2014-05-23T17:32:17.531Z","updated_at":"2014-05-23T17:32:17.534Z","chips":500,"username":"Lenny Wiegand III","gravatar_url":"http://gravatar.com/avatar/ce3e7ee8e95181bae1f4992a0006c889","authentication_token":null}</pre>
       </div>
     </div>
   </body>

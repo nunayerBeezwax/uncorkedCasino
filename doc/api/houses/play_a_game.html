@@ -40,37 +40,43 @@
 
           <h4>Headers</h4>
           <pre class="request headers">Host: example.org
-Cookie: </pre>
+Cookie: 
+Origin: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/houses?playgame=blackjack&amp;token=f8ec9a5e81ca9ee4b4654d50da8ca5d3</pre>
+          <pre class="request route highlight">GET /api/houses?playgame=blackjack&amp;token=8aedd3cd393fd0211e7deac5e7b27ef8</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">playgame: blackjack
-token: f8ec9a5e81ca9ee4b4654d50da8ca5d3</pre>
+token: 8aedd3cd393fd0211e7deac5e7b27ef8</pre>
 
 
             <h4>cURL</h4>
-            <pre class="request curl">curl &quot;http://localhost:3000/api/houses?playgame=blackjack&amp;token=f8ec9a5e81ca9ee4b4654d50da8ca5d3&quot; -X GET \
+            <pre class="request curl">curl &quot;http://localhost:3000//api/houses?playgame=blackjack&amp;token=8aedd3cd393fd0211e7deac5e7b27ef8&quot; -X GET \
 	-H &quot;Host: example.org&quot; \
-	-H &quot;Cookie: &quot;</pre>
+	-H &quot;Cookie: &quot; \
+	-H &quot;Origin: &quot;</pre>
 
             <h3>Response</h3>
             <h4>Headers</h4>
             <pre class="response headers">X-Frame-Options: SAMEORIGIN
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: POST, PUT, DELETE, GET, OPTIONS
+Access-Control-Request-Method: *
+Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, OPTIONS
 Content-Type: application/json; charset=utf-8
-ETag: &quot;3c200ccaf7532f071e426e0c241871f6&quot;
+ETag: &quot;2dbbdc00e9e32de871d885d27b4b82f0&quot;
 Cache-Control: max-age=0, private, must-revalidate
 Set-Cookie: request_method=GET; path=/
-X-Request-Id: 957a4f9c-0cfa-4ee8-8db7-9ab02a4165dd
-X-Runtime: 0.066844
-Content-Length: 72</pre>
+X-Request-Id: cf50c8d5-1eec-45b8-af87-40f7e41732c3
+X-Runtime: 0.031576
+Content-Length: 175</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{"table #":1,"Game name":"blackjack","Hand":[],"Bet":0,"House cards":[]}</pre>
+              <pre class="response body">{"Table #":1,"Game name":"blackjack","Hand":[],"Bet":0,"House cards":[],"Action on":1,"Table limit":[5,10],"User Current Chips":500,"User Hand Value":[],"House Hand Value":[]}</pre>
       </div>
     </div>
   </body>

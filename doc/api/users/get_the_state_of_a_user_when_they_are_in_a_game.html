@@ -40,34 +40,40 @@
 
           <h4>Headers</h4>
           <pre class="request headers">Host: example.org
-Cookie: </pre>
+Cookie: 
+Origin: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/users/66</pre>
+          <pre class="request route highlight">GET /api/users/29</pre>
 
 
 
             <h4>cURL</h4>
-            <pre class="request curl">curl &quot;http://localhost:3000/api/users/66&quot; -X GET \
+            <pre class="request curl">curl &quot;http://localhost:3000//api/users/29&quot; -X GET \
 	-H &quot;Host: example.org&quot; \
-	-H &quot;Cookie: &quot;</pre>
+	-H &quot;Cookie: &quot; \
+	-H &quot;Origin: &quot;</pre>
 
             <h3>Response</h3>
             <h4>Headers</h4>
             <pre class="response headers">X-Frame-Options: SAMEORIGIN
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: POST, PUT, DELETE, GET, OPTIONS
+Access-Control-Request-Method: *
+Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, OPTIONS
 Content-Type: application/json; charset=utf-8
-ETag: &quot;53595ec3b6cd2291a4e6ef593049f1a4&quot;
+ETag: &quot;1e0e14aed99919697c693462cbd81939&quot;
 Cache-Control: max-age=0, private, must-revalidate
 Set-Cookie: request_method=GET; path=/
-X-Request-Id: cf28f3d1-9084-483e-9c52-32477c78f8f7
-X-Runtime: 0.014012
-Content-Length: 433</pre>
+X-Request-Id: 9538992d-8e84-40fb-9630-7cf3c1570725
+X-Runtime: 0.011347
+Content-Length: 539</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{"table #":1,"Game name":"blackjack","Hand":[],"Bet":0,"House cards":[{"id":3841,"deck_id":74,"created_at":"2014-05-21T17:30:10.454Z","updated_at":"2014-05-21T17:30:12.371Z","seat_id":null,"suit":"D","rank":4,"shoe_id":25,"table_id":25,"played":true},{"id":3871,"deck_id":75,"created_at":"2014-05-21T17:30:10.729Z","updated_at":"2014-05-21T17:30:12.374Z","seat_id":null,"suit":"S","rank":8,"shoe_id":25,"table_id":25,"played":true}]}</pre>
+              <pre class="response body">{"Table #":1,"Game name":"blackjack","Hand":[],"Bet":0,"House cards":[{"id":2110,"deck_id":41,"created_at":"2014-05-23T17:32:17.615Z","updated_at":"2014-05-23T17:32:18.720Z","seat_id":null,"suit":"H","rank":4,"shoe_id":11,"table_id":11,"played":true},{"id":2268,"deck_id":44,"created_at":"2014-05-23T17:32:18.013Z","updated_at":"2014-05-23T17:32:18.718Z","seat_id":null,"suit":"H","rank":6,"shoe_id":11,"table_id":11,"played":true}],"Action on":1,"Table limit":[5,10],"User Current Chips":500,"User Hand Value":[],"House Hand Value":[4,6]}</pre>
       </div>
     </div>
   </body>

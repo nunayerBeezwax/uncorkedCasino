@@ -40,37 +40,43 @@
 
           <h4>Headers</h4>
           <pre class="request headers">Host: example.org
-Cookie: </pre>
+Cookie: 
+Origin: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">GET /api/houses?games=all&amp;token=cdf6566a41c66168ff8284d81a474ab1</pre>
+          <pre class="request route highlight">GET /api/houses?games=all&amp;token=a3bdbb4f5add30155a072b27a62b7db4</pre>
 
             <h4>Query Parameters</h4>
             <pre class="request query_parameters highlight">games: all
-token: cdf6566a41c66168ff8284d81a474ab1</pre>
+token: a3bdbb4f5add30155a072b27a62b7db4</pre>
 
 
             <h4>cURL</h4>
-            <pre class="request curl">curl &quot;http://localhost:3000/api/houses?games=all&amp;token=cdf6566a41c66168ff8284d81a474ab1&quot; -X GET \
+            <pre class="request curl">curl &quot;http://localhost:3000//api/houses?games=all&amp;token=a3bdbb4f5add30155a072b27a62b7db4&quot; -X GET \
 	-H &quot;Host: example.org&quot; \
-	-H &quot;Cookie: &quot;</pre>
+	-H &quot;Cookie: &quot; \
+	-H &quot;Origin: &quot;</pre>
 
             <h3>Response</h3>
             <h4>Headers</h4>
             <pre class="response headers">X-Frame-Options: SAMEORIGIN
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: POST, PUT, DELETE, GET, OPTIONS
+Access-Control-Request-Method: *
+Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, OPTIONS
 Content-Type: application/json; charset=utf-8
-ETag: &quot;6f3ae2485dc0bda8e6e0e1611872d8a2&quot;
+ETag: &quot;6cca5dff71ea645ff1d7422151e69fdf&quot;
 Cache-Control: max-age=0, private, must-revalidate
 Set-Cookie: request_method=GET; path=/
-X-Request-Id: 6fa39937-041d-45ac-89ed-97ce5516dcaf
-X-Runtime: 0.009574
+X-Request-Id: b8433278-9988-4e3d-a6b8-85f3cc7f17c9
+X-Runtime: 0.025760
 Content-Length: 122</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">[{"id":2,"name":"blackjack","created_at":"2014-05-21T17:29:45.126Z","updated_at":"2014-05-21T17:29:45.128Z","house_id":2}]</pre>
+              <pre class="response body">[{"id":1,"name":"blackjack","created_at":"2014-05-23T17:32:12.337Z","updated_at":"2014-05-23T17:32:12.342Z","house_id":1}]</pre>
       </div>
     </div>
   </body>

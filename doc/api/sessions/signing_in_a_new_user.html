@@ -41,38 +41,44 @@
           <h4>Headers</h4>
           <pre class="request headers">Host: example.org
 Content-Type: application/x-www-form-urlencoded
-Cookie: </pre>
+Cookie: 
+Origin: </pre>
 
           <h4>Route</h4>
           <pre class="request route highlight">POST /api/users/sign_in</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">user[password]=123455678&user[username]=Dr.+Tate+Wisozk</pre>
+            <pre class="request body">user[password]=123455678&user[username]=Keenan+Emard</pre>
 
             <h4>cURL</h4>
-            <pre class="request curl">curl &quot;http://localhost:3000/api/users/sign_in&quot; -d 'user[password]=123455678&amp;user[username]=Dr.+Tate+Wisozk' -X POST \
+            <pre class="request curl">curl &quot;http://localhost:3000//api/users/sign_in&quot; -d &#39;user[password]=123455678&amp;user[username]=Keenan+Emard&#39; -X POST \
 	-H &quot;Host: example.org&quot; \
 	-H &quot;Content-Type: application/x-www-form-urlencoded&quot; \
-	-H &quot;Cookie: &quot;</pre>
+	-H &quot;Cookie: &quot; \
+	-H &quot;Origin: &quot;</pre>
 
             <h3>Response</h3>
             <h4>Headers</h4>
             <pre class="response headers">X-Frame-Options: SAMEORIGIN
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: POST, PUT, DELETE, GET, OPTIONS
+Access-Control-Request-Method: *
+Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, OPTIONS
 Content-Type: application/json; charset=utf-8
-ETag: &quot;996e2a92e89035e7d08e5d610b3dc586&quot;
+ETag: &quot;af582ff0a7039e52c9a7a12d1bb5ae29&quot;
 Cache-Control: max-age=0, private, must-revalidate
 Set-Cookie: request_method=POST; path=/
-_gaming_api_session=ZWNGc29YK1p0RkhuRmZHbXpZbnlFaWpGK3BRYzBnbFNPc0w5SS9RamxSYzNCODFSSk1LcWRGWmNFbzJvbGc1L2NpQWU0MVhLZDR4bjRmcFg4eUtkYTMwTm8wRWpFZzdzbWppMWNVbDhUa05wZHgxMnB2c2lTSHBqbVBOU3RseGRIZGs1a1ZlTkk1YXJYQm5TYmx5UFVBPT0tLU1hd3hpWG42MHBNREM0aEFWWkJFOGc9PQ%3D%3D--aa5b405e34d7f59433efb022bfff2a0588d66ccf; path=/; HttpOnly
-X-Request-Id: 1b8da370-16fe-4377-ad0e-f121df8b382a
-X-Runtime: 0.200794
+_gaming_api_session=bURNRlhwbWQxQnN5V0NXYlBqNDJkMGc5ZGFrMG00TkFnQ05TVkpCanRsdE4xQUh6eUExSmVuenh6Ym12Ky9mV0FKVnR3MndkdzkyaU5vbUpUWkMzbXQ3WnFmSENBNk0weHBvMGVtdEJGYWxkUnpkY3FNbXFHQ3dNRUdkSWhOR0pabTFDSW9Cc0QvaFY2alJKSnJwdDRBPT0tLWJmY0ZrZFVJOWlMZVJkUlBTS09MRWc9PQ%3D%3D--6967a631d9809cb1b7ecd72d1d4c0bda09dd8694; path=/; HttpOnly
+X-Request-Id: 005063a2-3747-40eb-b08c-68f5c9127d23
+X-Runtime: 0.024049
 Content-Length: 219</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{"success":true,"auth_token":{"id":2,"access_token":"185ddea0181f889b4df2a6d144628eac","created_at":"2014-05-21T17:29:42.538Z","updated_at":"2014-05-21T17:29:42.538Z","user_id":1},"email":"stefanie_dietrich@wolff.info"}</pre>
+              <pre class="response body">{"success":true,"auth_token":{"id":6,"access_token":"e2b8e25b0eb96397d3afb6a43352738f","created_at":"2014-05-23T17:32:16.477Z","updated_at":"2014-05-23T17:32:16.477Z","user_id":21},"email":"felton.mccullough@kuhic.org"}</pre>
       </div>
     </div>
   </body>

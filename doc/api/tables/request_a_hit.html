@@ -41,37 +41,43 @@
           <h4>Headers</h4>
           <pre class="request headers">Host: example.org
 Content-Type: application/x-www-form-urlencoded
-Cookie: </pre>
+Cookie: 
+Origin: </pre>
 
           <h4>Route</h4>
-          <pre class="request route highlight">PUT api/tables/9</pre>
+          <pre class="request route highlight">PUT api/tables/21</pre>
 
 
             <h4>Body</h4>
-            <pre class="request body">decision=hit&token=67fa53e208bdd55063af56346d116ccd</pre>
+            <pre class="request body">decision=hit&token=a47f15b92fdf167fb67531c0cfae5298</pre>
 
             <h4>cURL</h4>
-            <pre class="request curl">curl &quot;http://localhost:3000api/tables/9&quot; -d 'decision=hit&amp;token=67fa53e208bdd55063af56346d116ccd' -X PUT \
+            <pre class="request curl">curl &quot;http://localhost:3000/api/tables/21&quot; -d &#39;decision=hit&amp;token=a47f15b92fdf167fb67531c0cfae5298&#39; -X PUT \
 	-H &quot;Host: example.org&quot; \
 	-H &quot;Content-Type: application/x-www-form-urlencoded&quot; \
-	-H &quot;Cookie: &quot;</pre>
+	-H &quot;Cookie: &quot; \
+	-H &quot;Origin: &quot;</pre>
 
             <h3>Response</h3>
             <h4>Headers</h4>
             <pre class="response headers">X-Frame-Options: SAMEORIGIN
 X-XSS-Protection: 1; mode=block
 X-Content-Type-Options: nosniff
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: POST, PUT, DELETE, GET, OPTIONS
+Access-Control-Request-Method: *
+Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, OPTIONS
 Content-Type: application/json; charset=utf-8
-ETag: &quot;aed7559764b528410c9a2603ed253b8c&quot;
+ETag: &quot;a6800d12be65387d9e5f112af06faeae&quot;
 Cache-Control: max-age=0, private, must-revalidate
 Set-Cookie: request_method=PUT; path=/
-X-Request-Id: b3f501a0-3daa-4e7f-a030-6450dc8d2f05
-X-Runtime: 0.047011
-Content-Length: 623</pre>
+X-Request-Id: 2230f556-7fca-4844-9927-e6763337ff3d
+X-Runtime: 0.022332
+Content-Length: 738</pre>
             <h4>Status</h4>
             <pre class="response status">200 OK</pre>
               <h4>Body</h4>
-              <pre class="response body">{"table #":1,"Game name":"blackjack","Hand":[{"id":1561,"deck_id":null,"created_at":"2014-05-21T17:29:54.056Z","updated_at":"2014-05-21T17:29:54.064Z","seat_id":41,"suit":"h","rank":5,"shoe_id":null,"table_id":null,"played":false},{"id":1562,"deck_id":null,"created_at":"2014-05-21T17:29:54.068Z","updated_at":"2014-05-21T17:29:54.071Z","seat_id":41,"suit":"h","rank":3,"shoe_id":null,"table_id":null,"played":false},{"id":1327,"deck_id":26,"created_at":"2014-05-21T17:29:52.246Z","updated_at":"2014-05-21T17:29:54.109Z","seat_id":41,"suit":"H","rank":1,"shoe_id":9,"table_id":null,"played":true}],"Bet":0,"House cards":[]}</pre>
+              <pre class="response body">{"Table #":1,"Game name":"blackjack","Hand":[{"id":4577,"deck_id":null,"created_at":"2014-05-23T17:32:24.090Z","updated_at":"2014-05-23T17:32:24.090Z","seat_id":101,"suit":null,"rank":4,"shoe_id":null,"table_id":null,"played":false},{"id":4578,"deck_id":null,"created_at":"2014-05-23T17:32:24.091Z","updated_at":"2014-05-23T17:32:24.091Z","seat_id":101,"suit":null,"rank":4,"shoe_id":null,"table_id":null,"played":false},{"id":4338,"deck_id":84,"created_at":"2014-05-23T17:32:23.473Z","updated_at":"2014-05-23T17:32:24.107Z","seat_id":101,"suit":"S","rank":9,"shoe_id":21,"table_id":null,"played":true}],"Bet":10,"House cards":[],"Action on":1,"Table limit":[5,10],"User Current Chips":490,"User Hand Value":[4,4,9],"House Hand Value":[]}</pre>
       </div>
     </div>
   </body>
