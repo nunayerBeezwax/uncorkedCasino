@@ -54,17 +54,27 @@ class Table < ActiveRecord::Base
   	self.stand(user)
   end
 
-  # def split(user)
-  # 	## totally unfinished... problematic
-  # 	if handify(user.seat.cards).uniq.count == 1
-  # 		temp_seat = Seat.new(user_id: user.id, table_id: self.id)
-  # 		temp_seat.cards << user.seat.cards.shift
-  # 		temp_seat.cards << @rack.shift
-  # 		## pass it to user decision
-  # 		user.seat.cards << @rack.shift
-  # 		## pass it to user decision
-  # 	end
-  # end
+  def split(user)
+  	user.seat.increment!(:placed_bet, user.seat.placed_bet)
+  	user.decrement!(:chips, user.seat.placed_bet)
+  	user.split_hands = Split.new(user)
+  	user.seat.cards = []
+  end
+
+  def split_hit(user)
+  	user.split_hands.hands.first << random_card
+  end
+
+  def split_stand(user)
+  	if user.split_hands.hands.count > 1
+  		user.seat.cards << user.split_hands.hands.shift
+  	elsif user.split_hands.hands.count == 1
+  		user.seat.cards << user.split_hands.hands.shift
+  		stand(user)
+  	else
+  		stand(user)
+  	end
+  end
 
 	### Table behaviors ###
 
@@ -79,6 +89,7 @@ class Table < ActiveRecord::Base
 		end
 		2.times { self.cards << random_card }
 		if blackjack(self.cards)
+			self.end_of_hand = true
 			house_blackjack_payouts
 		end
 	end
@@ -86,6 +97,7 @@ class Table < ActiveRecord::Base
 	def draw
 		hand = self.count(handify(self.cards))
 		if self.bust(hand)
+			self.update(end_of_hand: true)
 			self.dealer_bust_payout
 		else
 			if hand <= 16 
@@ -93,6 +105,7 @@ class Table < ActiveRecord::Base
 				draw
 			end
 		end
+		self.update(end_of_hand: true)
 		self.standard_payout(hand)
 	end
 
@@ -106,6 +119,7 @@ class Table < ActiveRecord::Base
 		self.users.each { |u| u.seat.update(cards: []) }
 		self.cards = []
 		self.action = 1
+		self.end_of_hand = false
 		if self.shoe.cards.where(played: false).count < 30
 			fill_shoe
 		end
@@ -188,13 +202,34 @@ class Table < ActiveRecord::Base
 			
 	def standard_payout(dealer_total)
 		self.users.each do |user|
-			if user.seat.cards != []	
-				if handify(user.seat.cards).inject(:+) < dealer_total
-					loss(user)
-				elsif handify(user.seat.cards).inject(:+) == dealer_total
-					push(user)
+			binding.pry
+			if user.seat.cards.count > 0
+				if user.split_hands
+					i = user.seat.cards.index(user.split_hands.split_card)
+					first_hand = user.seat.cards[1..i]
+					second_hand = user.seat.cards[i+1..-1]
+					if count(handify(first_hand)) < dealer_total
+						loss(user)
+					elsif count(handify(first_hand)) == dealer_total
+						push(user)
+					else
+						win(user)
+					end
+					if count(handify(second_hand)) < dealer_total
+						loss(user)
+					elsif count(handify(second_hand)) == dealer_total
+						push(user)
+					else
+						win(user)
+					end
 				else
-					win(user)
+					if count(handify(user.seat.cards)) < dealer_total
+						loss(user)
+					elsif count(handify(user.seat.cards)) == dealer_total
+						push(user)
+					else
+						win(user)
+					end
 				end
 			else 
 				loss(user)
@@ -230,7 +265,7 @@ class Table < ActiveRecord::Base
 	end
 
 	def winner(user_cards, house_cards)
-		result = handify(user_cards).inject(:+) - handify(house_cards).inject(:+)
+		result = count(handify(user_cards)) - count(handify(house_cards))
 		if result == 0
 			"Push"
 		elsif result > 0
