@@ -3,7 +3,7 @@ Rails.application.configure do
    config.middleware.use Rack::Cors do
       allow do
         origins '*'
-        resource '*', :headers => :any, :methods => [:get, :post, :options]
+        resource '*', :headers => :any, :methods => [:get, :post, :options, :put, :delete]
       end
     end
   # In the development environment your application's code is reloaded on
