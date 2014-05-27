@@ -19,8 +19,8 @@ class Api::SessionsController < Devise::RegistrationsController
         success: true,
         auth_token: ApiKey.create(:user_id =>resource.id),
         auth_token: ApiKey.create(user_id: resource.id),
-        email: resource.email
-        # username too?
+        email: resource.email,
+        username: resource.username
       }
       return
     end
