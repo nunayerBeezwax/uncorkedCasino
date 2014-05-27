@@ -21,6 +21,10 @@ module Api
 					@table.stand(identify_user)
 				elsif params[:decision] == "double"
 					@table.double_down(identify_user)
+
+					render json: identify_user.state
+				elsif params[:decision] == "split"
+					@table.split(identify_user)
 				end
 			end
 			render json: identify_user.state

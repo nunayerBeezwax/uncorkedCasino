@@ -80,6 +80,57 @@ describe Table do
 		end
 	end
 
+	describe "#split" do
+		it "allows a player with matched deal cards to play 2 hands" do
+			@user1.seat.update(placed_bet: 5)
+			@user1.seat.cards << Card.new(rank: 9, suit: "H")
+			@user1.seat.cards << Card.new(rank: 9, suit: "D")
+			@table.split(@user1)
+			@user1.seat.placed_bet.should eq 10
+			@user1.seat.cards.should eq []
+			@user1.split_hands.hands.flatten.count.should eq 4
+		end
+	end
+
+	describe "#split_hit" do
+		it "allows a user who has split to hit one of the hands" do
+			@user1.seat.update(placed_bet: 5)
+			@user1.seat.cards << Card.new(rank: 9, suit: "H")
+			@user1.seat.cards << Card.new(rank: 9, suit: "D")
+			@table.split(@user1)
+			@table.split_hit(@user1)
+			@user1.split_hands.hands.first.count.should eq 3
+			@user1.split_hands.hands.last.count.should eq 2
+		end
+	end
+
+	describe "#split_stand" do
+		it "stands the first of the split hands, and puts the cards back in the user's hand" do
+			@user1.seat.update(placed_bet: 5)
+			@user1.seat.cards << Card.new(rank: 9, suit: "H")
+			@user1.seat.cards << Card.new(rank: 9, suit: "D")
+			@table.split(@user1)
+			@table.split_stand(@user1)
+			@user1.seat.cards.flatten.count.should eq 2
+			@table.split_stand(@user1)
+			@user1.seat.cards.flatten.count.should eq 4
+		end
+	end
+
+	describe "split payouts" do
+		it "when a player splits, pays them properly" do
+			@user1.seat.update(placed_bet: 5)
+			@table.cards << Card.new(rank: 5)
+			@table.cards << Card.new(rank: 9)
+			@user1.seat.cards << Card.new(rank: 9, suit: "H")
+			@user1.seat.cards << Card.new(rank: 9, suit: "D")
+			@table.split(@user1)
+			@table.split_stand(@user1)
+			@table.split_stand(@user1)
+			@user1.chips.should eq 490
+		end
+	end
+
 	describe "#deal" do
 		it "gives 2 cards to each player who placed a bet" do
 			@user1.seat.place_bet(7)
@@ -123,6 +174,7 @@ describe Table do
 			@table.seats.first.cards.should eq []
 			@table.action.should eq 1
 			@table.shoe.cards.where(played: false).count.should > 30
+			@table.end_of_hand.should eq false
 		end
 	end
 
@@ -148,6 +200,17 @@ describe Table do
 			@user1.seat.cards << Card.new(rank: 10)
 			@table.count(@table.handify(@table.cards)).should eq 18
 			@table.count(@table.handify(@user1.seat.cards)).should eq 12
+		end
+	end
+
+	describe "#count" do
+		it "adds up the handified rank arrays, trating aces properly" do 
+			@table.cards << Card.new(rank: 10)
+			@table.cards << Card.new(rank: 7)
+			@user1.seat.cards << Card.new(rank: 1)
+			@user1.seat.cards << Card.new(rank: 9)
+			@table.count(@table.handify(@table.cards)).should eq 17
+			@table.count(@table.handify(@user1.seat.cards)).should eq 20
 		end
 	end
 
@@ -288,8 +351,8 @@ describe Table do
 			@user1.seat.cards << Card.new(rank: 12)
 			@user2.seat.cards << Card.new(rank: 3)
 			@user2.seat.cards << Card.new(rank: 10)
-			@user3.seat.cards << Card.new(rank: 10)
-			@user3.seat.cards << Card.new(rank: 10)
+			@user3.seat.cards << Card.new(rank: 9)
+			@user3.seat.cards << Card.new(rank: 1)
 			@table.cards << Card.new(rank: 7)
 			@table.cards << Card.new(rank: 10)
 			@table.standard_payout(@table.handify(@table.cards).inject(:+))

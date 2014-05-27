@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140520174049) do
+ActiveRecord::Schema.define(version: 20140523202748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,7 +73,8 @@ ActiveRecord::Schema.define(version: 20140520174049) do
     t.integer  "number"
     t.integer  "low"
     t.integer  "high"
-    t.integer  "action",     default: 1
+    t.integer  "action",      default: 1
+    t.boolean  "end_of_hand", default: false
   end
 
   create_table "users", force: true do |t|
@@ -93,6 +94,7 @@ ActiveRecord::Schema.define(version: 20140520174049) do
     t.string   "username"
     t.string   "gravatar_url"
     t.string   "authentication_token"
+    t.string   "split_hands"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
