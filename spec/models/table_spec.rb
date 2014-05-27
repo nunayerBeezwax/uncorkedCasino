@@ -203,6 +203,17 @@ describe Table do
 		end
 	end
 
+	describe "#count" do
+		it "adds up the handified rank arrays, trating aces properly" do 
+			@table.cards << Card.new(rank: 10)
+			@table.cards << Card.new(rank: 7)
+			@user1.seat.cards << Card.new(rank: 1)
+			@user1.seat.cards << Card.new(rank: 9)
+			@table.count(@table.handify(@table.cards)).should eq 17
+			@table.count(@table.handify(@user1.seat.cards)).should eq 20
+		end
+	end
+
 	describe "#blackjack" do
 		it "returns boolean result of blackjack if given hand" do
 			@user1.seat.cards << Card.new(suit: "h", rank: 1)
@@ -340,8 +351,8 @@ describe Table do
 			@user1.seat.cards << Card.new(rank: 12)
 			@user2.seat.cards << Card.new(rank: 3)
 			@user2.seat.cards << Card.new(rank: 10)
-			@user3.seat.cards << Card.new(rank: 10)
-			@user3.seat.cards << Card.new(rank: 10)
+			@user3.seat.cards << Card.new(rank: 9)
+			@user3.seat.cards << Card.new(rank: 1)
 			@table.cards << Card.new(rank: 7)
 			@table.cards << Card.new(rank: 10)
 			@table.standard_payout(@table.handify(@table.cards).inject(:+))

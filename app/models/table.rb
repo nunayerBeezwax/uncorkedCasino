@@ -202,7 +202,6 @@ class Table < ActiveRecord::Base
 			
 	def standard_payout(dealer_total)
 		self.users.each do |user|
-			binding.pry
 			if user.seat.cards.count > 0
 				if user.split_hands
 					i = user.seat.cards.index(user.split_hands.split_card)
