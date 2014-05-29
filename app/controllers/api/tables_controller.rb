@@ -11,6 +11,8 @@ module Api
 		def update
 			@table = Table.find(params[:id])
 			if params[:sit] == 'any'
+				User.all.each { |u| u.leave_table }
+				@table.next_hand
 				identify_user.sit(@table)
 			elsif params[:bet]
 				identify_user.seat.place_bet(params[:bet].to_i)
